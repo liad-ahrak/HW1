@@ -71,11 +71,13 @@ std::vector<int> CheapCustomer::order(const std::vector<Workout> &workout_option
 class HeavyMuscleCustomer : public Customer {
 public:
 HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
-    Customer(name,id), // using Customer constructor
-{}
+    Customer(name,id){} // using Customer constructor
+
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
+        for (auto ir = g1.rbegin(); ir != g1.rend(); ++ir)
+            cout << *ir << " ";
         for (Workout workout: workout_options){
             if(workout.getType() == ANAEROBIC){ // the vector is sorted in the file
                 heavy_Id.push_back(workout.getId());
