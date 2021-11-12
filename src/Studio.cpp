@@ -3,18 +3,23 @@
 
 #include <vector>
 #include <string>
-#include "Workout.h"
-#include "Trainer.h"
-#include "Action.h"
+#include "../include/Workout.h"
+#include "../include/Trainer.h"
+#include "../include/Action.h"
 
 
-class Studio{		
-public:
-	Studio();
+Studio:: Studio():open(0), trainer=0, workout_options=0, actionLog=0
+{
+}
     Studio(const std::string &configFilePath);
     void start();
-    int getNumOfTrainers() const;
-    Trainer* getTrainer(int tid);
+int Studio:: getNumOfTrainers() const {
+    return trainers.size()
+}
+//I didn't finish
+Trainer* getTrainer(int tid) {
+    for(int i)
+}
 	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
     std::vector<Workout>& getWorkoutOptions();
 

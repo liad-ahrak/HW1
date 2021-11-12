@@ -5,11 +5,14 @@
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
           </set>
         </option>
+=======
+>>>>>>> 32cf74fb8ff4745e84898b7e5dcab4763ef195b3
         <option name="version" value="2" />
       </MakefileProjectSettings>
     </option>
