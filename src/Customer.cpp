@@ -1,9 +1,7 @@
-#ifndef CUSTOMER_H_
-#define CUSTOMER_H_
-
 #include <vector>
 #include <string>
 #include "../include/Workout.h"
+#include "../include/Cusromer.h"
 
 
 Customer::Customer(std::string c_name, int c_id):
@@ -11,10 +9,8 @@ Customer::Customer(std::string c_name, int c_id):
     id(c_id);
 {}
        
-virtual std::vector<int> Customer::order(const std::vector<Workout> &workout_options)=0;
-    virtual std::string toString() const = 0{
-
-    }
+virtual std::vector<int> Customer::order(const std::vector<Workout> &workout_options)=0;//Abstract
+virtual std::string toString() const = 0; //Abstract
 std::string Customer::getName() const{
     return name;
 }
@@ -25,21 +21,21 @@ int Customer::getId() const{
 
 class SweatyCustomer : public Customer {
 public:
-SweatyCustomer::SweatyCustomer(std::string name, int id):
-    name(name),
-    id(id);
-{}
-std::vector<int> order(const std::vector<Workout> &workout_options){
-    vector<int> SC=new vector<int>;
-    if(workout_options.size()>0){
-        for (Workout workout: workout_options){
-            if(workout.getType() == CARDIO){
-                SC.push_back(workout);
+    SweatyCustomer::SweatyCustomer(std::string name, int id):
+        Customer(name,id) // using Customer constructor
+    {}
+    std:: Customer:: vector<int> order(const std::vector<Workout> &workout_options){
+        std::vector<int> sweat;
+        if(workout_options.size()>0){
+            for (Workout workout: workout_options){
+                if(workout.getType() == CARDIO){
+                    sweat.push_back(workout.getId());
+                    this->price += workout.getPrice();
+                }
             }
         }
+        return sweat;
     }
-    return SC;
-}
     std::string toString() const;
 //private:
 };
@@ -48,8 +44,7 @@ std::vector<int> order(const std::vector<Workout> &workout_options){
 class CheapCustomer : public Customer {
 public:
 CheapCustomer::CheapCustomer(std::string name, int id):
-    name(name),
-    id(id);
+        Customer(name,id) // using Customer constructor
 {}
 std::vector<int> order(const std::vector<Workout> &workout_options){
     vector<int> CC=new vector<int>;
@@ -73,8 +68,7 @@ std::vector<int> order(const std::vector<Workout> &workout_options){
 class HeavyMuscleCustomer : public Customer {
 public:
 HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
-    name(name),
-    id(id);
+        Customer(name,id) // using Customer constructor
 {}
     std::vector<int> order(const std::vector<Workout> &workout_options);
     std::string toString() const;
@@ -85,8 +79,7 @@ HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
 class FullBodyCustomer : public Customer {
 public:
 FullBodyCustomer::FullBodyCustomer(std::string name, int id):
-    name(name),
-    id(id);
+        Customer(name,id) // using Customer constructor
 {}
     std::vector<int> order(const std::vector<Workout> &workout_options);
     std::string toString() const;
