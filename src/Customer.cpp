@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <algorithm>
 #include "../include/Workout.h"
 
 
@@ -25,12 +26,12 @@ int Customer::getId() const{
 class SweatyCustomer : public Customer {
 public:
 SweatyCustomer::SweatyCustomer(std::string name, int id):
-    Customer(name,id) // using Customer constructor
-{}
+    Customer(name,id){} // using Customer constructor
+
 std::vector<int> SweatyCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> sweaty_Id;
     if(workout_options.size()>0){
-        for (Workout workout: workout_options){
+        for (Workout workout: workout_options){ //Iterator
             if(workout.getType() == CARDIO){
                 sweaty_Id.push_back(workout.getId()); //Value(int)
                 this-> price +=workout.getPrice();
@@ -50,13 +51,17 @@ std::vector<int> SweatyCustomer::order(const std::vector<Workout> &workout_optio
 class CheapCustomer : public Customer {
 public:
 CheapCustomer::CheapCustomer(std::string name, int id):
-    Customer(name,id) // using Customer constructor
-{}
+    Customer(name,id){} // using Customer constructor
+
 std::vector<int> CheapCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> cheap_Id;
     if(workout_options.size()>0){
-        cheap_Id.push_back(workout_options[0].getId());//the vector is sorted in the file
-        this-> price +=workout.getPrice();
+        std::vector<Workout> order_workout_by_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT
+        std::sort(order_workout_by_price.begin(), order_workout_by_price.end(),[](workout a, workout b){
+            return a.getPrice() < b.getPrice();
+        });
+        cheap_Id.push_back((order_workout_by_price[0]).getId());
+        this-> price +=(order_workout_by_price[0]).getPrice();
     }
     return cheap_Id;
 }        
@@ -76,17 +81,21 @@ HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
-        for (auto ir = g1.rbegin(); ir != g1.rend(); ++ir)
-            cout << *ir << " ";
-        for (Workout workout: workout_options){
-            if(workout.getType() == ANAEROBIC){ // the vector is sorted in the file
-                heavy_Id.push_back(workout.getId());
-            }
+        std::vector<Workout> order_workout_by_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT- take only ANAEROBIC
+        std::sort(order_workout_by_price.begin(), order_workout_by_price.end(),[](workout a, workout b){
+            return a.getPrice() < b.getPrice();
+        });
+        for(i= order_workout_by_price.size()-1; i=>0 ; --i){ //Loop that takes all the workouts IDs
+            heavy_Id.push_back((order_workout_by_price[i]).getId());
+            this-> price += (order_workout_by_price[i]).getPrice();
         }
+    }
+    if(heavy_Id.size() == 0){
+        //through Exepsion
     }
     return heavy_Id;
 }        
-    }
+
     std::string HeavyMuscleCustomer::toString() const{
         std::string heavy_Str = //later after the method in action;
         return heavy_Str;
@@ -98,16 +107,43 @@ std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_
 class FullBodyCustomer : public Customer {
 public:
 FullBodyCustomer::FullBodyCustomer(std::string name, int id):
-    Customer(name,id) // using Customer constructor
-{}
-    std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_options){
-        std::vector<int> fullbody_Id;
-        if(workout_options.size()>0){
-        for (Workout workout: workout_options){
-            if(workout.getType() == ANAEROBIC){ // the vector is sorted in the file
-                fullbody_Id.push_back(workout.getId());
-            }
-        }
+    Customer(name,id){} // using Customer constructor
+
+std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_options){
+    std::vector<int> fullbody_Id;
+    if(workout_options.size()>0){
+    std::vector<Workout> cardio_by_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT- take only CARDIO
+    std::sort(cardio_by_price.begin(), cardio_by_price.end(),[](workout a, workout b){
+        return a.getPrice() < b.getPrice();
+    }); 
+    if(cardio_by_price.size()>0){
+        heavy_Id.push_back((cardio_by_price[0]).getId());
+        this-> price += (cardio_by_price[0]).getPrice();
+    }
+    else{
+
+    }
+    std::vector<Workout> mix_type_by_reverse_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT- take only MIX
+    std::sort(mix_type_by_reverse_price.begin(), mix_type_by_reverse_price.end(),[](workout a, workout b){
+        return a.getPrice() > b.getPrice();
+    });
+    if(mix_type_by_price.size()>0){
+        heavy_Id.push_back((mix_type_by_price[0]).getId());
+        this-> price += (mix_type_by_price[0]).getPrice();
+    }
+    else{
+
+    }
+    std::vector<Workout> anaerobic_by_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT- take only ANAEROBIC
+    std::sort(anaerobic_by_price.begin(), anaerobic_by_price.end(),[](workout a, workout b){
+        return a.getPrice() < b.getPrice();
+    }); 
+    if(anaerobic_by_price.size()>0){
+        heavy_Id.push_back((anaerobic_by_price[0]).getId());
+        this-> price += (anaerobic_by_price[0]).getPrice();
+    }
+    else{
+
     }
     return fullbody_Id;
     }
