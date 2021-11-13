@@ -1,10 +1,8 @@
-#ifndef CUSTOMER_H_
-#define CUSTOMER_H_
-
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "../include/Workout.h"
+#include "Customer.h"
+#include "Workout.h"
 
 
 Customer::Customer(std::string c_name, int c_id): //constructor
@@ -12,7 +10,7 @@ Customer::Customer(std::string c_name, int c_id): //constructor
     id(c_id),
     price(0);
 {}
-public:       
+      
 virtual std::vector<int> Customer::order(const std::vector<Workout> &workout_options)=0; //Abstract
 virtual std::string toString() const = 0 //Abstract
 std::string Customer::getName() const{ 
@@ -124,7 +122,7 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
 
     }
     std::vector<Workout> mix_type_by_reverse_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT- take only MIX
-    std::sort(mix_type_by_reverse_price.begin(), mix_type_by_reverse_price.end(),[](workout a, workout b){
+    std::sort(mix_type_by_reverse_price.begin(), mix_type_by_reverse_price.end(),[](workout a, Workout b){
         return a.getPrice() > b.getPrice();
     });
     if(mix_type_by_price.size()>0){
@@ -153,6 +151,3 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
     }
 //private:
 };
-
-
-#endif

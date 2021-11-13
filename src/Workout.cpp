@@ -1,5 +1,5 @@
 #include <string>
-#include "../include/Workout.h.h"
+#include "../include/Workout.h"
 
 enum WorkoutType{
     ANAEROBIC, MIXED, CARDIO
@@ -22,7 +22,5 @@ int Workout::getPrice() const{
     return price;
 }
 WorkoutType Workout::getType() const{
-    return WorkoutType;
+    return type;
 }
-
-#endif

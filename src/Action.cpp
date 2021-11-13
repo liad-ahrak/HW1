@@ -1,42 +1,36 @@
-#ifndef ACTION_H_
-#define ACTION_H_
-
-#include <string>
-#include <iostream>
-#include "../include/Customer.h"
-
-enum ActionStatus{
-    COMPLETED, ERROR
-};
-
-//Forward declaration
-class Studio;
-
-class BaseAction{
-public:
-    BaseAction();
-    ActionStatus getStatus() const;
-    virtual void act(Studio& studio)=0;
-    virtual std::string toString() const=0;
-protected:
-    void complete();
-    void error(std::string errorMsg);
-    std::string getErrorMsg() const;
-private:
-    std::string errorMsg;
-    ActionStatus status;
-};
+#include "Action.h"
+#include <istream>
 
 
-class OpenTrainer : public BaseAction {
-public:
-    OpenTrainer(int id, std::vector<Customer *> &customersList);
-    void act(Studio &studio);
-    std::string toString() const;
+BaseAction:: BaseAction();
+ActionStatus BaseAction:: getStatus() const{
+    return status;
+}
+void BaseAction:: complete(){
+    status = COMPLETED;
+}
+void BaseAction:: error(std::string errorMsg){
+    (*this).errorMsg = errorMsg;
+    status = ERROR;
+ }
+std::string BaseAction:: getErrorMsg() const{
+     return errorMsg;
+ }
+
+
+OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList){
+    Trainer* trnP = Studio:: getTrainer(id);
+    if (trnP == 0 || (*trnP).isOpen()){
+        error();
+        std::cout <<get
+    }
+}
+    void OpenTrainer:: act(Studio &studio);
+    std::string OpenTrainer:: toString() const;
 private:
 	const int trainerId;
 	std::vector<Customer *> customers;
-};
+
 
 
 class Order : public BaseAction {
@@ -80,13 +74,17 @@ private:
 };
 
 
-class PrintWorkoutOptions : public BaseAction {
-public:
-    PrintWorkoutOptions();
-    void act(Studio &studio);
-    std::string toString() const;
-private:
-};
+PrintWorkoutOptions:: PrintWorkoutOptions();
+void PrintWorkoutOptions:: act(Studio &studio){
+    for(Workout workout: studio.getWorkoutOptions()){
+        std::cout << workout.getName() <<", ";
+        std::cout << workout.getType() <<", ";
+        std::cour << workout.getPrice() <<", " << endl;
+    }
+    complete();
+}
+std::string PrintWorkoutOptions:: toString() const{ return "PrintWorkoutOptions";}
+
 
 
 class PrintTrainerStatus : public BaseAction {
