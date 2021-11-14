@@ -22,13 +22,13 @@ OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList)
 void OpenTrainer:: act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
     if (trnP == 0 || (*trnP).isOpen()){
-        error("Workout session does not exist or is already open");
+        error("Error: Workout session does not exist or is already open");
         std::cout <<getErrorMsg() << std::endl;
     }
     else{
         Trainer& trn = *trnP;
         if (trn.getCapacity() < customers.size()){
-            error("The trainer doesn't the capacity for all of the customers");
+            error("Error: The trainer doesn't the capacity for all of the customers");
             std::cout <<getErrorMsg() <<std::endl;
         }
         else{
@@ -42,7 +42,8 @@ void OpenTrainer:: act(Studio &studio){
             complete();
             std::cout<<completeStr;
         }
-    }    
+    }
+    studio.actionsLog.push_back(this);
 }
 std::string OpenTrainer:: toString() const{
     return completeStr;
@@ -66,6 +67,7 @@ void Order::act(Studio &studio){
         std::cout<<completeStr;
         complete();
     }
+    studio.actionsLog.push_back(this);
 }
 std::string Order:: toString() const{
     return completeStr;
@@ -95,6 +97,7 @@ void MoveCustomer::act(Studio &studio){
     completeStr = "move"+std::to_string(srcTrainer)+std::to_string(dstTrainer)+std::to_string(id)+"\n";
     std::cout<<completeStr;
     complete();
+    studio.actionsLog.push_back(this);
 }
 std::string MoveCustomer:: toString() const{
     return completeStr;
@@ -115,7 +118,7 @@ void Close:: act(Studio &studio){
         completeStr = "Trainer"+ std::to_string(trainerId)+"closed. Salary"+std::to_string((*trainerP).getSalary())+"NIS"+"\n";
         (*trainerP).closeTrainer();
     }
-
+    studio.actionsLog.push_back(this);
 }
 std::string Close:: toString() const{
     return completeStr;
@@ -131,6 +134,7 @@ void CloseAll:: act(Studio &studio){
             trainer.closeTrainer();
         }
     }
+    studio.actionsLog.push_back(this);
 }
 std::string CloseAll:: toString() const{
     return completeStr;
@@ -150,6 +154,7 @@ void PrintWorkoutOptions:: act(Studio &studio){
     }
     complete();
     std::cout<<completeStr;
+    studio.actionsLog.push_back(this);
 }
 std::string PrintWorkoutOptions:: toString() const{ return completeStr;}
 
@@ -191,34 +196,47 @@ void PrintTrainerStatus:: act(Studio &studio){
     }
     std::cout<<completeStr;
     complete();
+    studio.actionsLog.push_back(this);
 }
 std::string PrintTrainerStatus:: toString() const{
     return completeStr;
 }
 
 
-class PrintActionsLog : public BaseAction {
-public:
-    PrintActionsLog();
-    void act(Studio &studio);
-    std::string toString() const;
-private:
-};
+
+PrintActionsLog:: PrintActionsLog(){}
+void PrintActionsLog:: act(Studio &studio){
+    std:: vector<BaseAction*> actionsLog = studio.getActionsLog();
+    for(BaseAction* actP: actionsLog){
+        BaseAction& act1 = * actP;
+        std::cout<<act1.toString();
+        if(act1.getStatus()==COMPLETED){
+            std:: cout<<"complete";
+        }
+        else{
+            std::cout<<(*actP).getErrorMsg();
+        }
+    }
+}
+std::string PrintActionsLog:: toString() const{
+}
 
 
-class BackupStudio : public BaseAction {
-public:
-    BackupStudio();
-    void act(Studio &studio);
-    std::string toString() const;
-private:
-};
+
+BackupStudio:: BackupStudio(){}
+void BackupStudio:: act(Studio &studio){
+    backup = *(Studio(studio));
+}
+std::string BackupStudio:: toString() const{
+
+}
 
 
-class RestoreStudio : public BaseAction {
-public:
-    RestoreStudio();
-    void act(Studio &studio);
-    std::string toString() const;
 
-};
+RestoreStudio ::RestoreStudio(){}
+void RestoreStudio ::act(Studio &studio){//need to do move method to studio
+    studio = backup;
+}
+std::string RestoreStudio ::toString() const{
+
+}
