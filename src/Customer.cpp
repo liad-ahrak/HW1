@@ -10,7 +10,7 @@ Customer::Customer(std::string c_name, int c_id): //constructor
     name(c_name),
     id(c_id)
 {}
-Customer(const Customer &other): //copy constructor
+Customer::Customer(const Customer &other): //copy constructor
     name(other.getName()),
     id(other.getId())
 {}
