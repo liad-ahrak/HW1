@@ -3,16 +3,17 @@
 #include <algorithm>
 #include "Customer.h"
 #include "Workout.h"
+#include <istream>
 
 
 Customer::Customer(std::string c_name, int c_id): //constructor
     name(c_name),
     id(c_id),
-    price(0);
+    price(0)
 {}
       
 virtual std::vector<int> Customer::order(const std::vector<Workout> &workout_options)=0; //Abstract
-virtual std::string toString() const = 0 //Abstract
+virtual std::string Customer::toString() const = 0 //Abstract
 std::string Customer::getName() const{ 
     return name;
 }
@@ -79,11 +80,11 @@ HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
-        std::vector<Workout> order_workout_by_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT- take only ANAEROBIC
-        std::sort(order_workout_by_price.begin(), order_workout_by_price.end(),[](workout a, workout b){
+        std::vector<Workout> order_workout_by_price= ; // BUILT COPY CONSTRUCTON IN WORKOUT- take only ANAEROBIC
+        std::sort(order_workout_by_price.begin(), order_workout_by_price.end(),[](Workout a, Workout b){
             return a.getPrice() < b.getPrice();
         });
-        for(i= order_workout_by_price.size()-1; i=>0 ; --i){ //Loop that takes all the workouts IDs
+        for(int i = order_workout_by_price.size()-1; i>=0 ; --i){ //Loop that takes all the workouts IDs
             heavy_Id.push_back((order_workout_by_price[i]).getId());
             this-> price += (order_workout_by_price[i]).getPrice();
         }
@@ -111,7 +112,7 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
     std::vector<int> fullbody_Id;
     if(workout_options.size()>0){
     std::vector<Workout> cardio_by_price= &workout_options; // BUILT COPY CONSTRUCTON IN WORKOUT- take only CARDIO
-    std::sort(cardio_by_price.begin(), cardio_by_price.end(),[](workout a, workout b){
+    std::sort(cardio_by_price.begin(), cardio_by_price.end(),[](Workout a, Workout b){
         return a.getPrice() < b.getPrice();
     }); 
     if(cardio_by_price.size()>0){
