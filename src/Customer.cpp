@@ -14,7 +14,7 @@ Customer::Customer(const Customer &other): //copy constructor
     name(other.getName()),
     id(other.getId())
 {}
-~Customer(){//destructor
+//~Customer();//destructor
 std::string Customer::getName() const{ 
     return name;
 }
