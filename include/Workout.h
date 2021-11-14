@@ -9,7 +9,10 @@ enum WorkoutType{
 
 class Workout{
 public:
-    Workout(int w_id, std::string w_name, int w_price, WorkoutType w_type);
+    Workout(int w_id, std::string w_name, int w_price, WorkoutType w_type);//constructor
+    Workout(const Workout &other);//copy constructor
+    ~Workout();//destructor
+    Workout & operator = (const Workout &W);// copy assignment- no need
     int getId() const;
     std::string getName() const;
     int getPrice() const;

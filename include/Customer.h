@@ -8,6 +8,9 @@
 class Customer{
 public:
     Customer(std::string c_name, int c_id);
+    Customer(const Customer &other);//copy constructor
+    ~Customer();//destructor
+    Customer & operator = (const Customer &C);// copy assignment- no need
     virtual std::vector<int> order(const std::vector<Workout> &workout_options)=0;
     virtual std::string toString() const = 0;
     std::string getName() const;
@@ -15,15 +18,15 @@ public:
 private:
     const std::string name;
     const int id;
-    int price;
+
 };
 
 
 class SweatyCustomer : public Customer {
 public:
 	SweatyCustomer(std::string name, int id);
-    std::vector<int> order(const std::vector<Workout> &workout_options);
-    std::string toString() const;
+    virtual std::vector<int> order(const std::vector<Workout> &workout_options);
+    virtual std::string toString() const;
 private:
 };
 
@@ -31,8 +34,8 @@ private:
 class CheapCustomer : public Customer {
 public:
 	CheapCustomer(std::string name, int id);
-    std::vector<int> order(const std::vector<Workout> &workout_options);
-    std::string toString() const;
+    virtual std::vector<int> order(const std::vector<Workout> &workout_options);
+    virtual std::string toString() const;
 private:
 };
 
@@ -40,8 +43,8 @@ private:
 class HeavyMuscleCustomer : public Customer {
 public:
 	HeavyMuscleCustomer(std::string name, int id);
-    std::vector<int> order(const std::vector<Workout> &workout_options);
-    std::string toString() const;
+    virtual std::vector<int> order(const std::vector<Workout> &workout_options);
+    virtual std::string toString() const;
 private:
 };
 
@@ -49,8 +52,8 @@ private:
 class FullBodyCustomer : public Customer {
 public:
 	FullBodyCustomer(std::string name, int id);
-    std::vector<int> order(const std::vector<Workout> &workout_options);
-    std::string toString() const;
+    virtual std::vector<int> order(const std::vector<Workout> &workout_options);
+    virtual std::string toString() const;
 private:
 };
 
