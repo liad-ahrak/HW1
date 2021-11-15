@@ -19,8 +19,6 @@ Trainer* getTrainer(int tid) {
     for(int i)
 }
 	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
-std:: Stuido:: vector<Workout>& getWorkoutOptions(){
-    for(Workout workout: workout_options){
-        std::cout <<
-    }
+std:: vector<Workout>& Studio:: getWorkoutOptions(){
+    return workout_options;
 }
