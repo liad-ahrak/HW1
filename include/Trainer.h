@@ -16,6 +16,7 @@ public:
     Customer* getCustomer(int id);
     std::vector<Customer*>& getCustomers();
     std::vector<OrderPair>& getOrders();
+    Workout& findWorkout(int idW, const std::vector<Workout>& workoutOptions);
     void order(const int customer_id, const std::vector<int> workout_ids, const std::vector<Workout>& workout_options);
     void openTrainer();
     void closeTrainer();
@@ -26,6 +27,7 @@ private:
     bool open;
     std::vector<Customer*> customersList;
     std::vector<OrderPair> orderList; //A list of pairs for each order for the trainer - (customer_id, Workout)
+    int salary=0;
 };
 //std::vector<int> sweaty_Id;
 // = new 

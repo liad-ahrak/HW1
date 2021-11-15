@@ -5,7 +5,11 @@
 #include <iostream>
 #include "Customer.h"
 #include "Studio.h"
+<<<<<<< HEAD
 
+=======
+#include "Trainer.h"
+>>>>>>> 99476e4ced092ba762d662f162fba290bcf3a34f
 extern Studio* backup;
 
 enum ActionStatus{
