@@ -69,7 +69,8 @@ HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
-        std::vector<Workout> anaerobic_workout;
+
+        std::vector<Workout> anaerobic_workout=
         for (Workout workout: workout_options){ //Iterator
             if(workout.getType() == ANAEROBIC){ 
                 Workout anaerobic= Workout(workout);//copy constructor->destruct
