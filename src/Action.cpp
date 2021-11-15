@@ -1,9 +1,6 @@
 #include "Action.h"
-<<<<<<< HEAD
 #include "Trainer.h"
 #include "Studio.h"
-=======
->>>>>>> 99476e4ced092ba762d662f162fba290bcf3a34f
 
 BaseAction:: BaseAction() {}
 ActionStatus BaseAction:: getStatus() const{
