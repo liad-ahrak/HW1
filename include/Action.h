@@ -5,7 +5,9 @@
 #include <iostream>
 #include "Customer.h"
 #include "Studio.h"
+
 extern Studio* backup;
+
 enum ActionStatus{
     COMPLETED, ERROR
 };

@@ -17,10 +17,7 @@ Workout::Workout(const Workout &other): //copy constructor
     price(other.getPrice()),
     type(other.getType()) 
 {}
-Workout:: ~Workout(){//destructor- everything saved on the stack exept name
-//
-    name.~string();   
-}
+Workout:: ~Workout();//destructor
 //Getter functions
 int Workout::getId() const{ //return the data without ability to change it 2 const
     return id;

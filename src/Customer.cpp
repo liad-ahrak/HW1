@@ -69,27 +69,21 @@ HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
-
-        std::vector<Workout> anaerobic_workout=
-        for (Workout workout: workout_options){ //Iterator
-            if(workout.getType() == ANAEROBIC){ 
-                Workout anaerobic= Workout(workout);//copy constructor->destruct
-                anaerobic_workout.push_back(anaerobic); 
+        std::vector <Workout*> anaerobic_workout;//vector with pointers to our vector
+        for(Workout workout: workout_options){
+            if(workout.getType() == ANAEROBIC){
+                anaerobic_workout.push_back(&workout);
             }
         }
-        if(heavy_Id.size() > 0){
-            std::sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout a, Workout b){
-                return a.getPrice() < b.getPrice();
-            });
+        std::sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){ //sort by Type and then price
+               return (*a).getPrice() < (*b).getPrice();
+        });
+        if(anaerobic_workout.size() > 0){
             for(int i=0; i < anaerobic_workout.size(); ++i){
-                heavy_Id.push_back((anaerobic_workout[i]).getId());
+                heavy_Id.push_back((*anaerobic_workout[i]).getId());
             }
         }
-        for (Workout workout: anaerobic_workout){ //destruct the workouts in the vector
-            workout.~Workout();
-        }
-        anaerobic_workout.~vector(); //delete the vector itselfs
-    }
+    }// at the end of the AF anaerobic_workout is deleted
     return heavy_Id;
 }        
 
@@ -104,50 +98,34 @@ FullBodyCustomer::FullBodyCustomer(std::string name, int id):
 std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> fullbody_Id;
     if(workout_options.size()>0){
-        std::vector<Workout> cardio_workout;
-        std::vector<Workout> mix_workout;
-        std::vector<Workout> anaerobic_workout;
+        std::vector<Workout*> cardio_workout;
+        std::vector<Workout*> mix_workout;
+        std::vector<Workout*> anaerobic_workout;
         for (Workout workout: workout_options){ //Iterator
             if(workout.getType() == CARDIO){ 
-                Workout cardio= Workout(workout);//copy constructor->destruct
-                cardio_workout.push_back(cardio); 
+                cardio_workout.push_back(&workout); 
             }
             if(workout.getType() == MIXED){ 
-                Workout mixed= Workout(workout);//copy constructor->destruct
-                mix_workout.push_back(mixed); 
+                mix_workout.push_back(&workout); 
             }
             else{
-                Workout anaerobic= Workout(workout);//copy constructor->destruct
-                anaerobic_workout.push_back(anaerobic);
+                anaerobic_workout.push_back(&workout);
             }
         }
         if(cardio_workout.size() > 0 && mix_workout.size() > 0 &&  anaerobic_workout.size() > 0){
-            std::sort(cardio_workout.begin(), cardio_workout.end(),[](Workout a, Workout b){
-                    return a.getPrice() < b.getPrice();
+            std::sort(cardio_workout.begin(), cardio_workout.end(),[](Workout* a, Workout* b){
+                    return (*a).getPrice() < (*b).getPrice();
             });
-            std::sort(mix_workout.begin(), mix_workout.end(),[](Workout a, Workout b){
-                    return a.getPrice() > b.getPrice();
+            std::sort(mix_workout.begin(), mix_workout.end(),[](Workout* a, Workout* b){
+                    return (*a).getPrice() > (*b).getPrice();
             });
-            std::sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout a, Workout b){
-                    return a.getPrice() < b.getPrice();
+            std::sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){
+                    return (*a).getPrice() < (*b).getPrice();
             });
-            fullbody_Id.push_back((cardio_workout[0]).getId());
-            fullbody_Id.push_back((mix_workout[0]).getId());
-            fullbody_Id.push_back((anaerobic_workout[0]).getId());
+            fullbody_Id.push_back((*cardio_workout[0]).getId());
+            fullbody_Id.push_back((*mix_workout[0]).getId());
+            fullbody_Id.push_back((*anaerobic_workout[0]).getId());
         }
-        //Destractors
-        for (Workout workout: cardio_workout){ 
-            workout.~Workout();
-        }
-        cardio_workout.~vector(); 
-        for (Workout workout: mix_workout){ 
-            workout.~Workout();
-        }
-        mix_workout.~vector();
-        for (Workout workout: anaerobic_workout){
-            workout.~Workout();
-        }
-        anaerobic_workout.~vector();
     }
     return fullbody_Id;
 }
