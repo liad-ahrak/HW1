@@ -1,5 +1,4 @@
 #include "Action.h"
-#include "Trainer.h"
 
 BaseAction:: BaseAction() {}
 ActionStatus BaseAction:: getStatus() const{
@@ -196,7 +195,7 @@ void PrintTrainerStatus:: act(Studio &studio){
     }
     std::cout<<completeStr;
     complete();
-    studio.actionsLog.push_back(this);
+    (studio.getActionsLog()).push_back(this);
 }
 std::string PrintTrainerStatus:: toString() const{
     return completeStr;
