@@ -5,11 +5,6 @@
 #include <iostream>
 #include "Customer.h"
 #include "Studio.h"
-<<<<<<< HEAD
-
-=======
-#include "Trainer.h"
->>>>>>> 99476e4ced092ba762d662f162fba290bcf3a34f
 extern Studio* backup;
 
 enum ActionStatus{
@@ -26,6 +21,7 @@ public:
     virtual void act(Studio& studio)=0;
     virtual std::string toString() const=0;
     std:: string completeStr = 0; 
+    std:: string publicgetErrorMsg() const;
 protected:
     void complete();
     void error(std::string errorMsg);
@@ -39,6 +35,7 @@ private:
 class OpenTrainer : public BaseAction {
 public:
     OpenTrainer(int id, std::vector<Customer *> &customersList);
+    ~OpenTrainer();
     void act(Studio &studio);
     std::string toString() const;
 private:
