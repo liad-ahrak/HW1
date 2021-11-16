@@ -29,6 +29,12 @@ OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList)
 OpenTrainer:: ~OpenTrainer(){
     customers.clear();
 }
+OpenTrainer:: OpenTrainer(OpenTrainer* other):
+    trainerId((*other).trainerId){
+        for(Customer* customer:(*other).customers){
+            customers.push_back(customer);
+        }
+}
 void OpenTrainer:: act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
     if (trnP == 0 || (*trnP).isOpen()){
@@ -62,6 +68,8 @@ std::string OpenTrainer:: toString() const{
 
 Order:: Order(int id)
     :trainerId(id){}
+Order:: ~Order(){
+}
 void Order::act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
     if (trnP == 0 || (*trnP).isOpen()){
