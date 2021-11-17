@@ -20,21 +20,12 @@ std::string BaseAction:: getErrorMsg() const{
  * 
  * @return std:: the error massege 
  */
-std:: string BaseAction:: publicgetErrorMsg() const{
+std:: string BaseAction::publicgetErrorMsg() const{
     return errorMsg;
 }
 
 OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList)
     :trainerId(id), customers(customersList){}   
-OpenTrainer:: ~OpenTrainer(){
-    customers.clear();
-}
-OpenTrainer:: OpenTrainer(OpenTrainer* other):
-    trainerId((*other).trainerId){
-        for(Customer* customer:(*other).customers){
-            customers.push_back(customer);
-        }
-}
 void OpenTrainer:: act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
     if (trnP == 0 || (*trnP).isOpen()){
@@ -43,21 +34,15 @@ void OpenTrainer:: act(Studio &studio){
     }
     else{
         Trainer& trn = *trnP;
-        if (trn.getCapacity() < customers.size()){
-            error("Error: The trainer doesn't the capacity for all of the customers");
-            std::cout <<getErrorMsg() <<std::endl;
+        trn.openTrainer();
+        completeStr = "open "+std::to_string(trainerId)+" ";
+        for (int i=0; i<trn.getCapacity(); i++){   
+            trn.addCustomer(customers[i]);
+            completeStr += " "+customer->getName()+","+customer->toString();
         }
-        else{
-            trn.openTrainer();
-            completeStr = "open "+std::to_string(trainerId)+" ";
-            for (Customer* customer : customers){   
-                trn.addCustomer(customer);
-                completeStr += " "+customer->getName()+","+customer->toString();
-            }
-            completeStr += "\n";
-            complete();
-            std::cout<<completeStr;
-        }
+        completeStr += "\n";
+        complete();
+        std::cout<<completeStr;
     }
     studio.addActionToLog(this);
 }
@@ -67,9 +52,8 @@ std::string OpenTrainer:: toString() const{
 
 
 Order:: Order(int id)
-    :trainerId(id){}
-Order:: ~Order(){
-}
+    :trainerId(id)
+    {}
 void Order::act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
     if (trnP == 0 || (*trnP).isOpen()){
@@ -244,7 +228,7 @@ std::string PrintActionsLog:: toString() const{
 
 BackupStudio:: BackupStudio(){}
 void BackupStudio:: act(Studio &studio){
-    backup = *(studio);
+    backup = *(studio));
 }
 std::string BackupStudio:: toString() const{
 

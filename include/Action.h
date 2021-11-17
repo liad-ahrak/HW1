@@ -35,8 +35,6 @@ private:
 class OpenTrainer : public BaseAction {
 public:
     OpenTrainer(int id, std::vector<Customer *> &customersList);
-    ~OpenTrainer();
-    OpenTrainer(OpenTrainer* other);
     void act(Studio &studio);
     std::string toString() const;
 private:
@@ -48,7 +46,6 @@ private:
 class Order : public BaseAction {
 public:
     Order(int id);
-    ~Order();
     void act(Studio &studio);
     std::string toString() const;
 private:
