@@ -11,16 +11,45 @@ Studio::Studio(): //constructor
     workout_options(0),
     actionsLog(0) {}
 
-Studio::Studio(const std::string &configFilePath); // not done yet
+Studio::Studio(const std::string &configFilePath){
+    std:: vector<std:: string> spltIn = splitInput(configFilePath, '\n');
+    //need to find to to convert string to int
+} // not done yet
 
 void Studio::start(){
     open = true;
     std::cout<<"Studio is now open"<<std::endl;
     std:: string act;
     while(open){
-        std::cin >> act; 
+        std::cin >> act;
+        std:: vector<std::string> actVector = splitInput(act, ' ');
+        if(actVector[0].compare("open")){
+
+        }
     }
 
+}
+/**
+ * @brief this function split string\txt by given charcter
+ * 
+ * @param input = the input string\txt
+ * @param ch = the charcter that we want to split by it
+ * @return std::&  vector of string that every cell is word
+ */
+std:: vector<std::string>& Studio:: splitInput(const std::string &input, char ch){
+    std:: vector<std:: string> splitCommand;
+    std:: string tmp = "";
+    for(int i=0; i<input.size(); i++){
+        if(input[i] == ' '){
+            splitCommand.push_back(tmp);
+            tmp.clear();
+        }
+        else{
+            tmp.push_back(input[i]);
+        }
+    }
+    splitCommand.push_back(tmp);
+    return splitCommand;
 }
 
 int Studio:: getNumOfTrainers() const {

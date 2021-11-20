@@ -12,10 +12,15 @@ int main(int argc, char** argv){
     }
     string configurationFile = argv[1];
     Studio studio(configurationFile);
-    studio.start();
+    
     if(backup!=nullptr){
     	delete backup;
     	backup = nullptr;
+    }
+    std:: string input;
+    std:: cin >> input;
+    if(input.compare("start")==0){
+        studio.start();
     }
     return 0;
 }
