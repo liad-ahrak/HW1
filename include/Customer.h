@@ -1,16 +1,14 @@
 #ifndef CUSTOMER_H_
 #define CUSTOMER_H_
-
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <istream>
 #include "Workout.h"
 
 class Customer{
 public:
     Customer(std::string c_name, int c_id);
-    Customer(const Customer &other);//copy constructor
-    ~Customer();//destructor
-    Customer & operator = (const Customer &C);
     virtual std::vector<int> order(const std::vector<Workout> &workout_options)=0;
     virtual std::string toString() const = 0;
     std::string getName() const;

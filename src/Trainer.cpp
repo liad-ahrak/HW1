@@ -1,25 +1,32 @@
 #include "Trainer.h"
 #include <exception>
 #include <algorithm>
+#include <istream>
 
 typedef std::pair<int, Workout> OrderPair;
 
 Trainer:: Trainer(int t_capacity):
-    capacity(t_capacity), open(false){
-}
+    capacity(t_capacity),
+    open(false)
+    // the two other fields is called with the default constructor
+    {}
+
 int Trainer:: getCapacity() const{
     return capacity;
 }
-/**
+
+/**?
  * @brief this function add customer to the customerList only if the trainer have place
  * 
  * @param customer = the customer that we want to add
  */
+
 void Trainer:: addCustomer(Customer* customer){
-    if(customersList.size()<capacity){
+    if(customersList.size() < capacity){
         customersList.push_back(customer);
     }
 }
+
 /**
  * @brief this function make copy of the cusomers vector and orderList vector 
  * without the customer that we want to remove, and than clear the two vectors 
@@ -27,7 +34,17 @@ void Trainer:: addCustomer(Customer* customer){
  * 
  * @param id = the id of the customer that we want to remove
  */
-void Trainer:: removeCustomer(int id){
+
+void Trainer:: removeCustomer(int id){ //Action MoveCostumer
+    // check that this customer exists in the trainer session
+    int index=-1;
+    for(int i=0; (i<customersList.size()) && (index==-1); ++i){
+        int id_i =  (*customersList[i]).getId();
+        if(id_i == id){
+           index = i;
+           // remove from vac and move the others one forwar
+       }
+    }
     std::vector<int> idPlaces;
     std:: vector<OrderPair> newOrderList;
     for(OrderPair op: orderList){
@@ -56,30 +73,35 @@ void Trainer:: removeCustomer(int id){
  * @return Customer* = returning th
  */
 Customer* Trainer:: getCustomer(int id){
-    Customer* theChosenOne = nullptr;
-    for(Customer* cust: customersList){
-        if(id ==(*cust).getId()){
-            theChosenOne = cust;
+    Customer* custumer_id = nullptr;
+    for(Customer* custumer: customersList){
+        if(id ==(*custumer).getId()){
+            custumer_id = custumer;
         }
     }
-    return theChosenOne;
+    return custumer_id;
 }
+
 /**
  * @brief this function give refrence to the customers list
  * 
  * @return std::vector<Customer*>& the customerList
+
  */
 std::vector<Customer*>& Trainer::getCustomers(){
     return customersList;
 }
+
 /**
  * @brief Get the Orders object
  * 
  * @return std::vector<OrderPair>& 
  */
+
 std::vector<OrderPair>& Trainer:: getOrders(){
     return orderList;
 }
+
 /**
  * @brief find the workout with the same id from the workoutOptions vector
  * 
@@ -87,6 +109,7 @@ std::vector<OrderPair>& Trainer:: getOrders(){
  * @param workoutOptions the workoutOptins vector
  * @return Workout& 
  */
+
 Workout& Trainer:: findWorkout(int idW, const std::vector<Workout>& workoutOptions){
     for(Workout work: workoutOptions){
         if(work.getId()==idW){
@@ -94,6 +117,7 @@ Workout& Trainer:: findWorkout(int idW, const std::vector<Workout>& workoutOptio
         }
     }
 }
+
 /**
  * @brief this function add order to vaild customer, its mean that he customer of this trainer
  * and than add add the workout that he want 
@@ -102,6 +126,7 @@ Workout& Trainer:: findWorkout(int idW, const std::vector<Workout>& workoutOptio
  * @param workout_ids = the workout id that he want
  * @param workout_options = all the workout options
  */
+
 void Trainer:: order(const int customer_id, const std::vector<int> workout_ids, const std::vector<Workout>& workout_options){
     bool validC = false;
     for(Customer* customer: customersList){

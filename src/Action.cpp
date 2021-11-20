@@ -1,31 +1,40 @@
 #include "Action.h"
 
-BaseAction:: BaseAction() {}
+BaseAction:: BaseAction() {}//?????
+
 ActionStatus BaseAction:: getStatus() const{
     return status;
 }
+
 void BaseAction:: complete(){
     status = COMPLETED;
 }
+
 void BaseAction:: error(std::string errorMsg){
     (*this).errorMsg = errorMsg;
     status = ERROR;
- }
+}
+
 std::string BaseAction:: getErrorMsg() const{
     return errorMsg;
- }
+}
+
 /**
  * @brief this function is public 
- * becouse the protected doesn't at the sons of BaseAction
+ * because the protected doesn't at the sons of BaseAction
  * 
  * @return std:: the error massege 
  */
+////////////?  whats the diff btween them?
+
 std:: string BaseAction::publicgetErrorMsg() const{
     return errorMsg;
 }
 
-OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList)
-    :trainerId(id), customers(customersList){}   
+OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList):
+    trainerId(id),
+    customers(customersList){}  
+
 void OpenTrainer:: act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
     if (trnP == 0 || (*trnP).isOpen()){
@@ -46,8 +55,9 @@ void OpenTrainer:: act(Studio &studio){
     }
     studio.addActionToLog(this);
 }
+
 std::string OpenTrainer:: toString() const{
-    return completeStr;
+    return completeStr;///?
 }
 
 
