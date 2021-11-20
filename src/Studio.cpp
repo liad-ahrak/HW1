@@ -12,7 +12,12 @@ Studio::Studio(): //constructor
     actionsLog(0) {}
 
 Studio::Studio(const std::string &configFilePath){
+<<<<<<< HEAD
     std
+=======
+    std:: vector<std:: string> spltIn = splitInput(configFilePath, '\n');
+    //need to find to to convert string to int
+>>>>>>> 43f635a1e12c636b7b7158c8c31bb2cbe66abb13
 } // not done yet
 
 void Studio::start(){
@@ -21,12 +26,42 @@ void Studio::start(){
 
     std:: string act;
     while(open){
+<<<<<<< HEAD
         std::cin >> getline(command, ); 
         BaseAction* act = buildAction(command);
         act -> act(*this);
 
+=======
+        std::cin >> act;
+        std:: vector<std::string> actVector = splitInput(act, ' ');
+        if(actVector[0].compare("open")){
+
+        }
+>>>>>>> 43f635a1e12c636b7b7158c8c31bb2cbe66abb13
     }
 
+}
+/**
+ * @brief this function split string\txt by given charcter
+ * 
+ * @param input = the input string\txt
+ * @param ch = the charcter that we want to split by it
+ * @return std::&  vector of string that every cell is word
+ */
+std:: vector<std::string>& Studio:: splitInput(const std::string &input, char ch){
+    std:: vector<std:: string> splitCommand;
+    std:: string tmp = "";
+    for(int i=0; i<input.size(); i++){
+        if(input[i] == ' '){
+            splitCommand.push_back(tmp);
+            tmp.clear();
+        }
+        else{
+            tmp.push_back(input[i]);
+        }
+    }
+    splitCommand.push_back(tmp);
+    return splitCommand;
 }
 
 int Studio:: getNumOfTrainers() const {
