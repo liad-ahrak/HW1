@@ -10,11 +10,6 @@ Customer::Customer(std::string c_name, int c_id): //constructor
     name(c_name),
     id(c_id)
 {}
-Customer::Customer(const Customer &other): //copy constructor
-    name(other.getName()),
-    id(other.getId())
-{}
-//~Customer();//destructor
 std::string Customer::getName() const{ 
     return name;
 }
@@ -75,7 +70,7 @@ std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_
                 anaerobic_workout.push_back(&workout);
             }
         }
-        std::sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){ //sort by Type and then price
+        std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){ //sort by Type and then price
                return (*a).getPrice() < (*b).getPrice();
         });
         if(anaerobic_workout.size() > 0){
@@ -113,13 +108,13 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
             }
         }
         if(cardio_workout.size() > 0 && mix_workout.size() > 0 &&  anaerobic_workout.size() > 0){
-            std::sort(cardio_workout.begin(), cardio_workout.end(),[](Workout* a, Workout* b){
+            std::stable_sort(cardio_workout.begin(), cardio_workout.end(),[](Workout* a, Workout* b){
                     return (*a).getPrice() < (*b).getPrice();
             });
-            std::sort(mix_workout.begin(), mix_workout.end(),[](Workout* a, Workout* b){
+            std::stable_sort(mix_workout.begin(), mix_workout.end(),[](Workout* a, Workout* b){
                     return (*a).getPrice() > (*b).getPrice();
             });
-            std::sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){
+            std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){
                     return (*a).getPrice() < (*b).getPrice();
             });
             fullbody_Id.push_back((*cardio_workout[0]).getId());
