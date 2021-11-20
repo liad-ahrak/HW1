@@ -16,10 +16,10 @@ Studio::Studio(const std::string &configFilePath); // not done yet
 void Studio::start(){
     open = true;
     std::cout<<"Studio is now open"<<std::endl;
-    trainers=;
-    workout_options=;
-    actionsLog=;
-    open
+    std:: string act;
+    while(open){
+        std::cin >> act; 
+    }
 
 }
 
@@ -30,16 +30,26 @@ int Studio:: getNumOfTrainers() const {
 Trainer* Studio::getTrainer(int tid) {
     return trainers[tid];
 }
-<<<<<<< HEAD
 
 const std::vector<BaseAction*>& Studio::getActionsLog() const{// Return a reference to the history of actions
     return actionsLog;
 } 
 
 std::vector<Workout>& Studio::getWorkoutOptions(){
-=======
-	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
-std:: vector<Workout>& Studio:: getWorkoutOptions(){
->>>>>>> 99476e4ced092ba762d662f162fba290bcf3a34f
     return workout_options;
+}
+/**
+ * @brief add new action to the logActions vector
+ * 
+ * @param action = the new action we want to add to the log
+ */
+void Studio:: addActionToLog(BaseAction* action){
+    actionsLog.push_back(action);
+}
+/**
+ * @brief this function close the studio
+ * 
+ */
+void Studio:: close(){
+    open = false;
 }

@@ -1,6 +1,4 @@
 #include "Action.h"
-#include "Trainer.h"
-#include "Studio.h"
 
 BaseAction:: BaseAction() {}
 ActionStatus BaseAction:: getStatus() const{
@@ -14,9 +12,17 @@ void BaseAction:: error(std::string errorMsg){
     status = ERROR;
  }
 std::string BaseAction:: getErrorMsg() const{
-     return errorMsg;
+    return errorMsg;
  }
-
+/**
+ * @brief this function is public 
+ * becouse the protected doesn't at the sons of BaseAction
+ * 
+ * @return std:: the error massege 
+ */
+std:: string BaseAction::publicgetErrorMsg() const{
+    return errorMsg;
+}
 
 OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList)
     :trainerId(id), customers(customersList){}   
@@ -28,23 +34,17 @@ void OpenTrainer:: act(Studio &studio){
     }
     else{
         Trainer& trn = *trnP;
-        if (trn.getCapacity() < customers.size()){
-            error("Error: The trainer doesn't the capacity for all of the customers");
-            std::cout <<getErrorMsg() <<std::endl;
+        trn.openTrainer();
+        completeStr = "open "+std::to_string(trainerId)+" ";
+        for (int i=0; i<trn.getCapacity(); i++){   
+            trn.addCustomer(customers[i]);
+            completeStr += " "+customer->getName()+","+customer->toString();
         }
-        else{
-            trn.openTrainer();
-            completeStr = "open "+std::to_string(trainerId)+" ";
-            for (Customer* customer : customers){   
-                trn.addCustomer(customer);
-                completeStr += " "+customer->getName()+","+customer->toString();
-            }
-            completeStr += "\n";
-            complete();
-            std::cout<<completeStr;
-        }
+        completeStr += "\n";
+        complete();
+        std::cout<<completeStr;
     }
-    studio.actionsLog.push_back(this);
+    studio.addActionToLog(this);
 }
 std::string OpenTrainer:: toString() const{
     return completeStr;
@@ -52,7 +52,8 @@ std::string OpenTrainer:: toString() const{
 
 
 Order:: Order(int id)
-    :trainerId(id){}
+    :trainerId(id)
+    {}
 void Order::act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
     if (trnP == 0 || (*trnP).isOpen()){
@@ -68,7 +69,7 @@ void Order::act(Studio &studio){
         std::cout<<completeStr;
         complete();
     }
-    studio.actionsLog.push_back(this);
+    studio.addActionToLog(this);
 }
 std::string Order:: toString() const{
     return completeStr;
@@ -98,7 +99,7 @@ void MoveCustomer::act(Studio &studio){
     completeStr = "move"+std::to_string(srcTrainer)+std::to_string(dstTrainer)+std::to_string(id)+"\n";
     std::cout<<completeStr;
     complete();
-    studio.actionsLog.push_back(this);
+    studio.addActionToLog(this);
 }
 std::string MoveCustomer:: toString() const{
     return completeStr;
@@ -119,7 +120,7 @@ void Close:: act(Studio &studio){
         completeStr = "Trainer"+ std::to_string(trainerId)+"closed. Salary"+std::to_string((*trainerP).getSalary())+"NIS"+"\n";
         (*trainerP).closeTrainer();
     }
-    studio.actionsLog.push_back(this);
+    studio.addActionToLog(this);
 }
 std::string Close:: toString() const{
     return completeStr;
@@ -135,7 +136,8 @@ void CloseAll:: act(Studio &studio){
             trainer.closeTrainer();
         }
     }
-    studio.actionsLog.push_back(this);
+    studio.close();
+    studio.addActionToLog(this);
 }
 std::string CloseAll:: toString() const{
     return completeStr;
@@ -155,7 +157,7 @@ void PrintWorkoutOptions:: act(Studio &studio){
     }
     complete();
     std::cout<<completeStr;
-    studio.actionsLog.push_back(this);
+    studio.addActionToLog(this);
 }
 std::string PrintWorkoutOptions:: toString() const{ return completeStr;}
 
@@ -197,7 +199,7 @@ void PrintTrainerStatus:: act(Studio &studio){
     }
     std::cout<<completeStr;
     complete();
-    (studio.getActionsLog()).push_back(this);
+    studio.addActionToLog(this);
 }
 std::string PrintTrainerStatus:: toString() const{
     return completeStr;
@@ -215,7 +217,7 @@ void PrintActionsLog:: act(Studio &studio){
             std:: cout<<"complete";
         }
         else{
-            std::cout<<(*actP).getErrorMsg();
+            std::cout<<(*actP).publicgetErrorMsg();
         }
     }
 }
@@ -226,7 +228,7 @@ std::string PrintActionsLog:: toString() const{
 
 BackupStudio:: BackupStudio(){}
 void BackupStudio:: act(Studio &studio){
-    backup = *(Studio(studio));
+    backup = *(studio));
 }
 std::string BackupStudio:: toString() const{
 
