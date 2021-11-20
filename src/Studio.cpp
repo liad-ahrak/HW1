@@ -11,14 +11,20 @@ Studio::Studio(): //constructor
     workout_options(0),
     actionsLog(0) {}
 
-Studio::Studio(const std::string &configFilePath); // not done yet
+Studio::Studio(const std::string &configFilePath){
+    std
+} // not done yet
 
 void Studio::start(){
     open = true;
     std::cout<<"Studio is now open"<<std::endl;
+
     std:: string act;
     while(open){
-        std::cin >> act; 
+        std::cin >> getline(command, ); 
+        BaseAction* act = buildAction(command);
+        act -> act(*this);
+
     }
 
 }
@@ -52,4 +58,14 @@ void Studio:: addActionToLog(BaseAction* action){
  */
 void Studio:: close(){
     open = false;
+}
+
+BaseAction* buildAction(char* command){
+    actionType = getType(command);
+    if(actionType == 'open'){
+        int trainer = getTrainerId(command);
+        std::vector<Customer*> customer = getCustomers(command);
+        return new OpenTrainer(trainer,customer);
+
+    }
 }
