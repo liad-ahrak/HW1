@@ -1,43 +1,138 @@
 #include "Studio.h"
 #include <vector>
 #include <string>
-#include "../include/Workout.h"
-#include "../include/Trainer.h"
-#include "../include/Action.h"
+#include <sstream>
+#include "Workout.h"
+#include "Trainer.h"
+#include "Action.h"
+using namespace std;
 
 Studio::Studio(): //constructor
-    open(0), //the studio is closed at first
-    trainers(0), // 0 it is null at this case- for me
-    workout_options(0),
-    actionsLog(0) {}
+    open(false), 
+    trainers(0){}
 
 Studio::Studio(const std::string &configFilePath){
-<<<<<<< HEAD
-    std
-=======
     std:: vector<std:: string> spltIn = splitInput(configFilePath, '\n');
     //need to find to to convert string to int
->>>>>>> 43f635a1e12c636b7b7158c8c31bb2cbe66abb13
 } // not done yet
 
 void Studio::start(){
     open = true;
-    std::cout<<"Studio is now open"<<std::endl;
-
-    std:: string act;
-    while(open){
-<<<<<<< HEAD
-        std::cin >> getline(command, ); 
-        BaseAction* act = buildAction(command);
-        act -> act(*this);
-
-=======
-        std::cin >> act;
-        std:: vector<std::string> actVector = splitInput(act, ' ');
-        if(actVector[0].compare("open")){
-
+    cout<<"Studio is now open"<<endl;
+    BaseAction* action= nullptr;
+    string act;
+    int id=0;
+    do{
+        string command; //first word
+        string end_sent; 
+        cin >> act; //the first word of the input from the user
+        getline(cin,end_sent);
+        stringstream word(act);
+        getline(word,command,' ');
+        
+        if(command == "open"){
+            string trainer_id;
+            stringstream line(end_sent);
+            getline(line,trainer_id,' ');
+            int id= stoi(trainer_id); // first paramater
+            string customer_name;
+            vector<Customer*> list_of_customer;
+            while(getline(line,customer_name,',')){
+                string type_customer;
+                getline(line,type_customer,' ');
+                if(type_customer=="swt"){
+                    SweatyCustomer customer(customer_name,id);
+                    id= id+1;
+                }
+                else if(type_customer=="chp"){
+                    CheapCustomer customer(customer_name,id);
+                    id= id+1;
+                }
+                else if(type_customer=="mcl"){
+                    HeavyMuscleCustomer customer(customer_name,id);
+                    id= id+1;
+                }
+                else{//fbd
+                    FullBodyCustomer customer(customer_name,id);
+                    id= id+1;
+                }
+                list_of_customer.push_back(*customer);
+                // need to clear the vec
+            }
+            action= new OpenTrainer(id, list_of_customer);
+            action->act(*this);
         }
->>>>>>> 43f635a1e12c636b7b7158c8c31bb2cbe66abb13
+
+        else if(command == "order"){
+            string trainer_id;
+            stringstream line(end_sent);
+            getline(line,trainer_id,' '); // first paramater
+            int id= stoi(trainer_id);
+            action = new Order(id);
+            action->act(*this);
+        }
+
+        else if(command == "move"){
+            string original_id;
+            stringstream line(end_sent);
+            getline(line,original_id,' ');
+            int original_trainer_id=stoi(original_id);// first paramater
+            string dest_id;
+            stringstream line(end_sent);
+            getline(line,dest_id,' ');
+            int dest_trainer_id=stoi(dest_id); // second paramater
+            string cust_id;
+            stringstream line(end_sent);
+            getline(line,cust_id,' '); // first paramater
+            int customer_id= stoi(cust_id);
+            action = new MoveCustomer(original_trainer_id, dest_trainer_id, customer_id);
+            action->act(*this);
+        }
+
+        else if(command == "close"){
+            string trainer_id;
+            stringstream line(end_sent);
+            getline(line,trainer_id,' '); // first paramater
+            int id= stoi(trainer_id);
+            action = new Close(id);
+            action->act(*this);
+        }
+
+        else if(command == "workout_option"){
+            string workout_name;
+            stringstream line(end_sent);
+            getline(line,workout_name,' '); // first paramater
+
+            action->act(*this);
+        }
+
+        else if(command == "status"){
+            
+            action->act(*this);
+        }
+
+        else if(command == "log"){
+            
+            action->act(*this);
+        }
+
+        else if(command == "backup"){
+            
+            action->act(*this);
+        }
+
+        else if(command == "restore"){
+            
+            action->act(*this);
+        }
+
+        else if(command == "close"){
+            
+            action->act(*this);
+        }
+
+    } while(command =="closeAll"){
+
     }
 
 }
@@ -95,12 +190,58 @@ void Studio:: close(){
     open = false;
 }
 
+std::string Studio:: getType(){
+    std::string active_action;
+    // first word of the line
+    buildAction(active_action);
+
+}
 BaseAction* buildAction(char* command){
     actionType = getType(command);
     if(actionType == 'open'){
         int trainer = getTrainerId(command);
         std::vector<Customer*> customer = getCustomers(command);
         return new OpenTrainer(trainer,customer);
+    }
+    
+    else if(actionType == 'order'){
+        int trainer = getTrainerId(command);
+        return new Order(trainer);
+    }
+    
+    else if(actionType == 'move'){
+        
 
     }
+    else if(actionType == 'close'){
+        int trainer = getTrainerId(command);
+        return new Close(trainer);
+    }
+
+    else if(actionType == 'closeAll'){
+
+    }
+    else if(actionType == 'workout_option'){
+
+    }
+    else if(actionType == 'status'){
+
+    }
+    else if(actionType == 'log'){
+
+    }
+    else if(actionType == 'backup'){
+
+    }
+    else if(actionType == 'restore'){
+
+    }
+    else if(actionType == 'close'){
+        close();
+
+    }
+
+
+
+
 }

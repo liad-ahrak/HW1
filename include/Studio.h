@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 #include "Workout.h"
 #include "Trainer.h"
 #include "Studio.h"
@@ -22,6 +23,7 @@ public:
     // method to add action to the actionsLog vector
     void addActionToLog(BaseAction* action);
     void close();
+    std::string Studio:: getType();
 
 private:
     bool open;
