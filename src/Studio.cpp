@@ -18,6 +18,96 @@ Studio::Studio(const std::string &configFilePath){//basic data
     //need to find to to convert string to int 
 } // not done yet
 
+Studio:: Studio(Studio& other):
+    open(other.open)
+{
+    for(Trainer* t:other.trainers){
+        trainers.push_back(t);
+    }
+    for(Workout w: other.workout_options){
+        Workout newW(w.getId(),w.getName(), w.getPrice(), w.getType());
+        workout_options.push_back(newW);
+    }
+    for(BaseAction* ba: other.actionsLog){
+        actionsLog.push_back(ba);
+    }
+}
+Studio:: ~Studio(){
+    open = false;
+    for(Trainer* tr: trainers){
+        (*tr).~Trainer();
+    }
+    trainers.clear();
+    for(Workout w:workout_options){
+        w.~Workout();
+    }
+    workout_options.clear();
+    for(BaseAction* ba:actionsLog){
+        (*ba).~BaseAction();
+    }
+    actionsLog.clear();
+
+}
+Studio& Studio:: operator= (Studio& other){
+    if(this== &other){
+        return* this;
+    }
+    else{
+        for(Trainer* tr: trainers){
+        (*tr).~Trainer();
+        }
+        trainers.clear();
+        for(Workout w:workout_options){
+            w.~Workout();
+        }
+        workout_options.clear();
+        for(BaseAction* ba:actionsLog){
+            (*ba).~BaseAction();
+        }
+        actionsLog.clear();
+        for(Trainer* t:other.trainers){
+        trainers.push_back(t);
+        }
+        for(Workout w: other.workout_options){
+            Workout newW(w.getId(),w.getName(), w.getPrice(), w.getType());
+            workout_options.push_back(newW);
+        }
+        for(BaseAction* ba: other.actionsLog){
+            actionsLog.push_back(ba);
+        }
+    }
+}
+Studio:: Studio(Studio& other){
+    open = other.open;
+    trainers = other.trainers;
+    workout_options = other.workout_options;
+    actionsLog = other.actionsLog;
+    other.workout_options.clear();
+    other.trainers.clear();
+    other.actionsLog.clear();
+}
+Studio& Studio:: operator=(Studio&& other){
+    for(Trainer* tr: trainers){
+        (*tr).~Trainer();
+    }
+    trainers.clear();
+    for(Workout w:workout_options){
+        w.~Workout();
+    }
+    workout_options.clear();
+    for(BaseAction* ba:actionsLog){
+        (*ba).~BaseAction();
+    }
+    actionsLog.clear();
+    open = other.open;
+    trainers = other.trainers;
+    workout_options = other.workout_options;
+    actionsLog = other.actionsLog;
+    other.workout_options.clear();
+    other.trainers.clear();
+    other.actionsLog.clear();
+}
+
 void Studio::start(){
     open = true;
     cout<<"Studio is now open"<<endl;
