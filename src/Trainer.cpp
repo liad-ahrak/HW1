@@ -56,6 +56,9 @@ void Trainer:: removeCustomer(int id){ //Action MoveCostumer
     }
     orderList.clear();
     orderList = newOrderList;
+    if(customersList.size() == 0){
+        open==false;
+    }
 }
     
 /**
