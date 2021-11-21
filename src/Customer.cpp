@@ -20,8 +20,8 @@ int Customer::getId() const{
 
 
 SweatyCustomer::SweatyCustomer(std::string name, int id):
-    Customer(name,id){} // using Customer constructor
-
+    Customer(name,id)
+{} // using Customer constructor
 std::vector<int> SweatyCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> sweaty_Id;
     if(workout_options.size()>0){
@@ -37,63 +37,62 @@ std::vector<int> SweatyCustomer::order(const std::vector<Workout> &workout_optio
     return "swt";
 }
 
-CheapCustomer::CheapCustomer(std::string name, int id):
-    Customer(name,id){} // using Customer constructor
 
+CheapCustomer::CheapCustomer(std::string name, int id):
+    Customer(name,id)
+{} // using Customer constructor
 std::vector<int> CheapCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> cheap_Id;
-    int p_cheap = (workout_options[0]).getPrice();
-    int i_cheap=0; //index of cheapest workout
-    for(int i = 1; i < workout_options.size(); ++i){
-        if((workout_options[i]).getPrice() < p_cheap){
-            i_cheap=i;
+    if(workout_options.size()>0){
+        int p_cheap = (workout_options[0]).getPrice();
+        int i_cheap=0; //index of cheapest workout
+        for(int i = 1; i < workout_options.size(); ++i){
+            if((workout_options[i]).getPrice() < p_cheap){
+                i_cheap=i;
+            }
         }
+        cheap_Id.push_back((workout_options[i_cheap]).getId());
     }
-    cheap_Id.push_back((workout_options[i_cheap]).getId());
     return cheap_Id; 
-}      
-  
+}        
 std::string CheapCustomer::toString() const{
     return "chp";
 }
 
 
 HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
-    Customer(name,id){} // using Customer constructor
-
+    Customer(name,id)
+{} // using Customer constructor
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
         std::vector <Workout*> anaerobic_workout;//vector with pointers to our vector
         for(Workout workout: workout_options){
             if(workout.getType() == ANAEROBIC){
-                anaerobic_workout.push_back(&workout);
+                Workout* work = &workout;//cheack that this is a new pointer everytime!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                anaerobic_workout.push_back(work);
             }
         }
         std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){ //sort by Type and then price
-               return (*a).getPrice() < (*b).getPrice();
+               return (*a).getPrice() > (*b).getPrice();
         });
         if(anaerobic_workout.size() > 0){
             for(int i=0; i < anaerobic_workout.size(); ++i){
                 heavy_Id.push_back((*anaerobic_workout[i]).getId());
             }
         }
-        for(int i=0; i<anaerobic_workout.size();++i){
-            anaerobic_workout[i]=nullptr;
-        }//need to delete only the pointers not the memory
-        anaerobic_workout.~vector;// delete the vector
+        anaerobic_workout.clear();
     }
     return heavy_Id;
 }        
-
 std::string HeavyMuscleCustomer::toString() const{
     return "mcl";
 }
 
 
 FullBodyCustomer::FullBodyCustomer(std::string name, int id):
-    Customer(name,id){} // using Customer constructor
-
+    Customer(name,id)
+{} // using Customer constructor
 std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> fullbody_Id;
     if(workout_options.size()>0){
@@ -101,14 +100,15 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
         std::vector<Workout*> mix_workout;
         std::vector<Workout*> anaerobic_workout;
         for (Workout workout: workout_options){ //Iterator
+            Workout* work = &workout;//cheack that this is a new pointer everytime!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if(workout.getType() == CARDIO){ 
-                cardio_workout.push_back(&workout); 
+                cardio_workout.push_back(work); 
             }
             if(workout.getType() == MIXED){ 
-                mix_workout.push_back(&workout); 
+                mix_workout.push_back(work); 
             }
             else{
-                anaerobic_workout.push_back(&workout);
+                anaerobic_workout.push_back(work);
             }
         }
         if(cardio_workout.size() > 0 && mix_workout.size() > 0 &&  anaerobic_workout.size() > 0){
@@ -125,22 +125,12 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
             fullbody_Id.push_back((*mix_workout[0]).getId());
             fullbody_Id.push_back((*anaerobic_workout[0]).getId());
         }
-        for(int i=0; i<cardio_workout.size();++i){
-            cardio_workout[i]=nullptr;
-        }
-        cardio_workout.~vector;// delete the vector
-        for(int i=0; i<mix_workout.size();++i){
-            mix_workout[i]=nullptr;
-        }
-        mix_workout.~vector;// delete the vector
-        for(int i=0; i<anaerobic_workout.size();++i){
-            anaerobic_workout[i]=nullptr;
-        
-        anaerobic_workout.~vector;// delete the vector
+        cardio_workout.clear();
+        mix_workout.clear();
+        anaerobic_workout.clear();
     }
     return fullbody_Id;
 }
-
 std::string FullBodyCustomer::toString() const{
     return "fbd";
 }

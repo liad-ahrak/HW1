@@ -20,17 +20,15 @@ public:
     Trainer* getTrainer(int tid);
 	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
     std::vector<Workout>& getWorkoutOptions();
+
     // method to add action to the actionsLog vector
     void addActionToLog(BaseAction* action);
-    void close();
-    std::string Studio:: getType();
 
 private:
     bool open;
     std::vector<Trainer*> trainers;
     std::vector<Workout> workout_options;
     std::vector<BaseAction*> actionsLog;
-    std:: vector<std::string>& splitInput(const std::string &input, char ch);
 };
 
 #endif

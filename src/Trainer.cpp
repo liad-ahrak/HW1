@@ -9,17 +9,11 @@ Trainer:: Trainer(int t_capacity):
     capacity(t_capacity),
     open(false)
     // the two other fields is called with the default constructor
-    {}
+{}
 
 int Trainer:: getCapacity() const{
     return capacity;
 }
-
-/**?
- * @brief this function add customer to the customerList only if the trainer have place
- * 
- * @param customer = the customer that we want to add
- */
 
 void Trainer:: addCustomer(Customer* customer){
     if(customersList.size() < capacity){
@@ -34,18 +28,23 @@ void Trainer:: addCustomer(Customer* customer){
  * 
  * @param id = the id of the customer that we want to remove
  */
-
 void Trainer:: removeCustomer(int id){ //Action MoveCostumer
     // check that this customer exists in the trainer session
     int index=-1;
-    for(int i=0; (i<customersList.size()) && (index==-1); ++i){
-        int id_i =  (*customersList[i]).getId();
-        if(id_i == id){
-           index = i;
-           // remove from vac and move the others one forwar
-       }
+    for(int i=0; (i<customersList.size()); ++i){
+        if((*customersList[i]).getId() == id){
+            index = i;
+            //delete object
+            (*customersList[i]).getName().clear();
+        }
+        else if(index!=-1){
+            customersList[i]=customersList[i-1];
+            if(i == customersList.size()-1){
+                customersList[i]=nullptr;
+            }
+        }
     }
-    std::vector<int> idPlaces;
+    //std::vector<int> idPlaces;
     std:: vector<OrderPair> newOrderList;
     for(OrderPair op: orderList){
         if(id!=op.first){
@@ -57,36 +56,26 @@ void Trainer:: removeCustomer(int id){ //Action MoveCostumer
     }
     orderList.clear();
     orderList = newOrderList;
-    std::vector<Customer*> newCustomerList;
-    for(int i=0; i<customersList.size(); i++){
-        if(id != (*customersList[i]).getId()){
-            newCustomerList.push_back(customersList[i]);
-        }
-    }
-    customersList.clear();
-    customersList=newCustomerList;
 }
+    
 /**
  * @brief Get the Customer object
  * 
- * @param id == the id of the customer that we want
- * @return Customer* = returning th
+ * @return Customer* 
  */
 Customer* Trainer:: getCustomer(int id){
-    Customer* custumer_id = nullptr;
     for(Customer* custumer: customersList){
         if(id ==(*custumer).getId()){
-            custumer_id = custumer;
+            return custumer;
         }
     }
-    return custumer_id;
+    return nullptr;
 }
 
 /**
  * @brief this function give refrence to the customers list
  * 
  * @return std::vector<Customer*>& the customerList
-
  */
 std::vector<Customer*>& Trainer::getCustomers(){
     return customersList;
@@ -97,36 +86,29 @@ std::vector<Customer*>& Trainer::getCustomers(){
  * 
  * @return std::vector<OrderPair>& 
  */
-
 std::vector<OrderPair>& Trainer:: getOrders(){
     return orderList;
 }
 
 /**
  * @brief find the workout with the same id from the workoutOptions vector
- * 
  * @param idW = the workout id that we want
  * @param workoutOptions the workoutOptins vector
  * @return Workout& 
  */
-
 Workout& Trainer:: findWorkout(int idW, const std::vector<Workout>& workoutOptions){
     for(Workout work: workoutOptions){
         if(work.getId()==idW){
             return work;
         }
     }
+    // do we need to return?
 }
 
 /**
- * @brief this function add order to vaild customer, its mean that he customer of this trainer
- * and than add add the workout that he want 
- * 
- * @param customer_id = the customer that we want to order for him 
- * @param workout_ids = the workout id that he want
- * @param workout_options = all the workout options
+ * @brief this function add order to vaild customer,this customer belongs to this trainer
+ * and than add the workout that he wants.
  */
-
 void Trainer:: order(const int customer_id, const std::vector<int> workout_ids, const std::vector<Workout>& workout_options){
     bool validC = false;
     for(Customer* customer: customersList){
@@ -143,13 +125,11 @@ void Trainer:: order(const int customer_id, const std::vector<int> workout_ids, 
         }
     }
 }
-/**
- * @brief make the file of "open" to true
- * 
- */
+
 void Trainer::openTrainer(){
     open=true;
 }
+
 /**
  * @brief this function delete all the saved data that the trainer have
  * and change the "open" field to false

@@ -45,7 +45,8 @@ void OpenTrainer:: act(Studio &studio){
         Trainer& trn = *trnP;
         trn.openTrainer();
         completeStr = "open "+std::to_string(trainerId)+" ";
-        for (int i=0; i<trn.getCapacity(); i++){   
+        for (int i=0; i<trn.getCapacity(); i++){ 
+            Customer customer = *(customers[i]);  
             trn.addCustomer(customers[i]);
             completeStr += " "+customer->getName()+","+customer->toString();
         }
@@ -87,7 +88,10 @@ std::string Order:: toString() const{
 
 
 MoveCustomer::MoveCustomer(int src, int dst, int customerId):
-    srcTrainer(src),dstTrainer(dst),id(customerId)  {}
+    srcTrainer(src),
+    dstTrainer(dst),
+    id(customerId){}
+
 void MoveCustomer::act(Studio &studio){
     std::string errorM = "Cannot move customer";
     Trainer* srcTP = studio.getTrainer(srcTrainer);
@@ -116,8 +120,9 @@ std::string MoveCustomer:: toString() const{
 }
 
 
-Close:: Close(int id) 
-    :trainerId(id){}
+Close:: Close(int id):
+trainerId(id){}
+
 void Close:: act(Studio &studio){
     std:: string errorM = "Trainer does not exist or is not open";
     Trainer* trainerP = studio.getTrainer(trainerId);
@@ -176,6 +181,7 @@ std::string PrintWorkoutOptions:: toString() const{ return completeStr;}
 
 PrintTrainerStatus:: PrintTrainerStatus(int id):
     trainerId(id){}
+
 void PrintTrainerStatus:: act(Studio &studio){
     Trainer* trainerP = studio.getTrainer(trainerId);
     if(trainerP == nullptr || !(*trainerP).isOpen()){

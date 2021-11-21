@@ -11,14 +11,6 @@ Workout::Workout(int w_id, std::string w_name, int w_price, WorkoutType w_type):
     price(w_price),
     type(w_type) 
 {}
-Workout::Workout(const Workout &other): //copy constructor
-    id(other.getId()),
-    name(other.getName()),
-    price(other.getPrice()),
-    type(other.getType()) 
-{}
-Workout:: ~Workout();//destructor
-//Getter functions
 int Workout::getId() const{ //return the data without ability to change it 2 const
     return id;
 }
