@@ -164,5 +164,47 @@ bool Trainer:: isOpen(){
     return open;
 }
 
+//Rule of 5
+Trainer::~Trainer(){
+    
+    //customersList
+    for(int i=0; i<customersList.size();++i){
+        customersList[i]
 
+    }
+    //orderList
+    for(int i=0; i<orderList.size();++i){
+     
+    }
+
+} //destructor
+    
+Trainer::Trainer(Trainer &trainer){
+    std::vector<Customer*> new_trainer_customersList;
+    std::vector<OrderPair> new_trainer_orderList;
+
+    Trainer new_trainer(trainer.getCapacity(), trainer.isOpen(), );
+
+} //Copy Constructor
+    
+Trainer & Trainer::operator=(Trainer &trainer){
+    //check for "self assignment" and do nothing in that case
+    if(this == &trainer){
+        return *this;
+    }
+    // delete the prev info in this
+    this->customersList;
+    this->orderList;
+
+    return *this;
+
+} //Copy Assignment Operator
+    
+Trainer::Trainer(Trainer&& other){
+
+} //Move constructor
+    
+Trainer & Trainer::operator=(Trainer &){
+
+} //Move Assignment Operator
 
