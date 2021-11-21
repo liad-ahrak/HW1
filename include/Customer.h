@@ -16,7 +16,6 @@ public:
 private:
     const std::string name;
     const int id;
-
 };
 
 

@@ -71,6 +71,7 @@ std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_
             if(workout.getType() == ANAEROBIC){
                 Workout* work = &workout;//cheack that this is a new pointer everytime!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 anaerobic_workout.push_back(work);
+                work = nullptr;
             }
         }
         std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){ //sort by Type and then price

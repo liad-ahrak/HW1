@@ -1,6 +1,6 @@
 #include "Action.h"
 
-BaseAction:: BaseAction() {}//?????
+BaseAction:: BaseAction() {}
 
 ActionStatus BaseAction:: getStatus() const{
     return status;
@@ -25,8 +25,6 @@ std::string BaseAction:: getErrorMsg() const{
  * 
  * @return std:: the error massege 
  */
-////////////?  whats the diff btween them?
-
 std:: string BaseAction::publicgetErrorMsg() const{
     return errorMsg;
 }
@@ -37,28 +35,31 @@ OpenTrainer:: OpenTrainer(int id, std::vector<Customer *> &customersList):
 
 void OpenTrainer:: act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
-    if (trnP == 0 || (*trnP).isOpen()){
+    if (trnP == 0 || (*trnP).isOpen()){//trainer does not exist or open already
         error("Error: Workout session does not exist or is already open");
+        completeStr = std::to_string(trainerId);
+        for (Customer* cust:customers){  
+            Customer& customer = *cust;
+            completeStr += " "+customer.getName()+","+customer.toString();
+        }
         std::cout <<getErrorMsg() << std::endl;
     }
     else{
         Trainer& trn = *trnP;
         trn.openTrainer();
-        completeStr = "open "+std::to_string(trainerId)+" ";
-        for (int i=0; i<trn.getCapacity(); i++){ 
-            Customer customer = *(customers[i]);  
+        completeStr = "open "+std::to_string(trainerId);
+        for (int i=0; i<trn.getCapacity(); i++){  
+            Customer& customer = *(customers[i]);
             trn.addCustomer(customers[i]);
-            completeStr += " "+customer->getName()+","+customer->toString();
+            completeStr += " "+customer.getName()+","+customer.toString();
         }
-        completeStr += "\n";
-        complete();
+        complete();//success
         std::cout<<completeStr;
     }
     studio.addActionToLog(this);
 }
-
 std::string OpenTrainer:: toString() const{
-    return completeStr;///?
+    return completeStr;
 }
 
 
@@ -67,21 +68,22 @@ Order:: Order(int id):
     
 void Order::act(Studio &studio){
     Trainer* trnP = studio.getTrainer(trainerId);
-    if (trnP == 0 || (*trnP).isOpen()){
-        error("Workout session does not exist or is already open");
+    if (trnP == 0 || !(*trnP).isOpen()){
+        error("Trainer does not exist or is not open");
         std::cout <<getErrorMsg() << std::endl;
     }
     else{
         Trainer& trn = *trnP;
         completeStr = "order "+std::to_string(trainerId)+"\n";
         for (OrderPair op : trn.getOrders()){
-            completeStr += trn.getCustomer(op.first)->getName() + " Is Doing "+(op.second).getName()+"\n";
+            completeStr += (*(trn.getCustomer(op.first))).getName() + " Is Doing "+(op.second).getName()+"\n";
         }
         std::cout<<completeStr;
         complete();
     }
     studio.addActionToLog(this);
 }
+
 std::string Order:: toString() const{
     return completeStr;
 }
@@ -99,22 +101,24 @@ void MoveCustomer::act(Studio &studio){
     if(srcTP == 0 || dstTP == 0){
         error(errorM);
         std::cout<<errorM;
-        return;
     }//can get to this section only if the pointers is existing
-    Customer* cost = (*srcTP).getCustomer(id);
-    Trainer& srcT = (*srcTP);
-    Trainer& dstT = (*dstTP);
-    if(cost == 0 || !srcT.isOpen() || !dstT.isOpen() || (dstT.getCapacity()-(dstT.getCustomers()).size()) <= 0){
-        error(errorM);
-        std::cout<<errorM;
-    }//can complete the moving only if all the term are valid 
-    srcT.removeCustomer(id);
-    dstT.addCustomer(cost);
-    completeStr = "move"+std::to_string(srcTrainer)+std::to_string(dstTrainer)+std::to_string(id)+"\n";
-    std::cout<<completeStr;
-    complete();
+    else{
+        Customer* cust = (*srcTP).getCustomer(id);
+        Trainer& srcT = (*srcTP);
+        Trainer& dstT = (*dstTP);
+        if(cust == 0 || !srcT.isOpen() || !dstT.isOpen() || (dstT.getCapacity()-(dstT.getCustomers()).size()) == 0){
+            error(errorM);
+            std::cout<<errorM;
+        }//can complete the moving only if all the term are valid 
+        srcT.removeCustomer(id);// if it is the last customer trainer is closed
+        dstT.addCustomer(cust);
+        completeStr = "move "+std::to_string(srcTrainer)+" "+ std::to_string(dstTrainer)+" "+std::to_string(id)+"\n";
+        std::cout<<completeStr;
+        complete();
+    }
     studio.addActionToLog(this);
 }
+
 std::string MoveCustomer:: toString() const{
     return completeStr;
 }
@@ -132,7 +136,7 @@ void Close:: act(Studio &studio){
     }
     else{
         complete();
-        completeStr = "Trainer"+ std::to_string(trainerId)+"closed. Salary"+std::to_string((*trainerP).getSalary())+"NIS"+"\n";
+        completeStr = "Trainer "+ std::to_string(trainerId)+" closed. Salary "+std::to_string((*trainerP).getSalary())+"NIS"+"\n";
         (*trainerP).closeTrainer();
     }
     studio.addActionToLog(this);
@@ -147,17 +151,16 @@ void CloseAll:: act(Studio &studio){
     for(int i=0; i<studio.getNumOfTrainers(); i++){
         Trainer& trainer = *(studio.getTrainer(i));
         if(trainer.isOpen()){
-            completeStr += "Trainer"+ std::to_string(i)+"closed. Salary"+std::to_string(trainer.getSalary())+"NIS"+"\n";
+            completeStr += "Trainer "+ std::to_string(i)+" closed. Salary "+std::to_string(trainer.getSalary())+"NIS"+"\n";
             trainer.closeTrainer();
         }
     }
-    studio.close();
     studio.addActionToLog(this);
 }
+
 std::string CloseAll:: toString() const{
     return completeStr;
 }
-
 
 
 PrintWorkoutOptions:: PrintWorkoutOptions(){}
@@ -166,15 +169,17 @@ void PrintWorkoutOptions:: act(Studio &studio){
         std::string type;
         int typeI = workout.getType();
         if(typeI==ANAEROBIC){type = "Anaerobic";}
-        if(typeI==MIXED){type = "Mixed";}
-        if(typeI==CARDIO){type = "Cardio";}
-        completeStr += workout.getName()+", "+type+", "+std::to_string(workout.getPrice())+"\n";
+        else if(typeI==MIXED){type = "Mixed";}
+        else{type = "Cardio";}
+        completeStr += workout.getName()+ ", "+type+", "+std::to_string(workout.getPrice())+"\n";
     }
     complete();
     std::cout<<completeStr;
     studio.addActionToLog(this);
 }
-std::string PrintWorkoutOptions:: toString() const{ return completeStr;}
+std::string PrintWorkoutOptions:: toString() const{ 
+    return completeStr;
+}
 
 
 
@@ -184,34 +189,33 @@ PrintTrainerStatus:: PrintTrainerStatus(int id):
 
 void PrintTrainerStatus:: act(Studio &studio){
     Trainer* trainerP = studio.getTrainer(trainerId);
-    if(trainerP == nullptr || !(*trainerP).isOpen()){
-        completeStr += "Trainer"+std::to_string(trainerId)+"status: close \n";
+    if(!(*trainerP).isOpen()){
+        completeStr += "Trainer "+std::to_string(trainerId)+" status: closed \n";
     }
     else{
         Trainer trainer = *trainerP;
-        completeStr += "Trainer"+std::to_string(trainerId)+"status: open \n";
+        completeStr += "Trainer "+std::to_string(trainerId)+" status: open \n";
         completeStr += "Customers:\n";
         std::vector<Customer*> customers = trainer.getCustomers();
-        for(int i=0; i<customers.size(); ++i){
-            completeStr += std::to_string(i)+" "+(*(customers.at(i))).getName()+"\n";
+        for(Customer* cust: customers){
+            completeStr += std::to_string((*cust).getId())+" "+(*(cust)).getName()+"\n";
         }
         completeStr+="Orders:\n";
-        std::vector<OrderPair> cusOp = trainer.getOrders();
-        std::vector<Workout> workoutOp = studio.getWorkoutOptions();
+        std::vector<OrderPair> &cusOp = trainer.getOrders();
+        std::vector<Workout> &workoutOp = studio.getWorkoutOptions();
         int countW[workoutOp.size()];
         for(int i=0; i<workoutOp.size(); ++i){countW[i]=0;}
-        for(OrderPair op: cusOp){
+        for(OrderPair op: cusOp){//count the workouts for each one
             for(int i=0; i<workoutOp.size(); ++i){
                 if(workoutOp[i].getId()==op.second.getId()){
                     ++countW[i];
                 }
             }
         }
-        for (int i = 0; i < workoutOp.size(); i++)
-        {
-            completeStr += workoutOp[i].getName()+" "+std::to_string(workoutOp[i].getPrice())+"NIS "+std::to_string(workoutOp[i].getPrice())+"\n";
+        for (int i = 0; i < workoutOp.size(); i++){
+            completeStr += workoutOp[i].getName()+" "+std::to_string(workoutOp[i].getPrice())+"NIS "+std::to_string(countW[i])+"\n";
         }
-        completeStr+= "Current Trainer's salary: "+std::to_string(trainer.getSalary())+"\n";     
+        completeStr+= "Current Trainer's salary: "+std::to_string(trainer.getSalary())+"NIS\n";     
     }
     std::cout<<completeStr;
     complete();
@@ -230,21 +234,22 @@ void PrintActionsLog:: act(Studio &studio){
         BaseAction& act1 = * actP;
         std::cout<<act1.toString();
         if(act1.getStatus()==COMPLETED){
-            std:: cout<<"complete";
+            std:: cout<<"Complete\n";
         }
         else{
-            std::cout<<(*actP).publicgetErrorMsg();
+            std::cout<<act1.toString()<<(act1).publicgetErrorMsg()<<std::endl;
         }
     }
 }
 std::string PrintActionsLog:: toString() const{
+
 }
 
 
 
 BackupStudio:: BackupStudio(){}
 void BackupStudio:: act(Studio &studio){
-    backup = *(studio));
+    backup = *(studio);//copy constructor
 }
 std::string BackupStudio:: toString() const{
 
@@ -253,8 +258,13 @@ std::string BackupStudio:: toString() const{
 
 
 RestoreStudio ::RestoreStudio(){}
-void RestoreStudio ::act(Studio &studio){//need to do move method to studio
-    studio = backup;
+void RestoreStudio ::act(Studio &studio){//move constructor
+    if(backup==0){
+        error("No backup available");
+    }
+    else{
+       studio = backup; 
+    }
 }
 std::string RestoreStudio ::toString() const{
 

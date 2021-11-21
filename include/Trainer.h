@@ -23,6 +23,14 @@ public:
     void closeTrainer();
     int getSalary();
     bool isOpen();
+
+    //Rule of 5
+    ~Trainer(); //destructor
+    Trainer(Trainer &trainer); //Copy Constructor
+    Trainer & operator=(Trainer &trainer); //Copy Assignment Operator
+    Trainer(Trainer&& other); //Move constructor
+    Trainer &operator=(Trainer &); //Move Assignment Operator
+
 private:
     int capacity;
     bool open;
