@@ -135,18 +135,25 @@ void Trainer::openTrainer(){
  */
 void Trainer::closeTrainer(){
     open = false;
+    for(Customer* customer:customersList){
+        delete(customer);
+    }
     customersList.clear();
+    for(OrderPair pair:orderList){
+        //:((((((((((((((((()))))))))))))))))
+    }
     orderList.clear();
     salary=0;
 }
+
 /**
  * @brief Get the Salary object
- * 
  * @return int this is the salary
  */
 int Trainer:: getSalary(){
     return salary;
 }
+
 /**
  * @brief this function return if this trainer is open or close
  * 

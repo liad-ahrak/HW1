@@ -25,24 +25,27 @@ void Studio::start(){
     string act;
     int id=0;
     string command;//first word
-    do{
-        
-        string end_sent; 
-        cin >> act; //the first word of the input from the user
-        getline(cin,end_sent);
-        stringstream word(act);
-        getline(word,command,' ');
-        
+    string full_command;
+    while(open){
+        getline(cin,full_command);
+        stringstream word(full_command);
+        getline(word,command,' '); // the first word of the sentance
+        full_command = full_command.substr(full_command.find_first_of(" \t")+1);
+
         if(command == "open"){
             string trainer_id;
-            stringstream line(end_sent);
+            stringstream line(full_command);
             getline(line,trainer_id,' ');
             int id= stoi(trainer_id); // first paramater
+            full_command = full_command.substr(full_command.find_first_of(" \t")+1);
+
             string customer_name;
             vector<Customer*> list_of_customer;
             while(getline(line,customer_name,',')){
+                full_command = full_command.substr(full_command.find_first_of(",")+1);
                 string type_customer;
                 getline(line,type_customer,' ');
+                full_command = full_command.substr(full_command.find_first_of(" \t")+1);
                 Customer* new_customer;
                 if(type_customer=="swt"){
                     SweatyCustomer customer(customer_name,id);
@@ -75,35 +78,40 @@ void Studio::start(){
 
         else if(command == "order"){
             string id;
-            stringstream line(end_sent);
+            stringstream line(full_command);
             getline(line,id,' ');
-            int id_trainer= stoi(id); // first paramater
-            action = new Order(id_trainer);
+            int trainer_id= stoi(id);
+            full_command.clear();
+            action = new Order(trainer_id);
             action->act(*this);
         }
 
         else if(command == "move"){
             string original_id;
-            stringstream line(end_sent);
+            stringstream line(full_command);
             getline(line,original_id,' ');
             int original_trainer_id=stoi(original_id);// first paramater
+            full_command = full_command.substr(full_command.find_first_of(" \t")+1);
             string dest_id;
-            stringstream line(end_sent);
+            stringstream line(full_command);
             getline(line,dest_id,' ');
             int dest_trainer_id=stoi(dest_id); // second paramater
+            full_command = full_command.substr(full_command.find_first_of(" \t")+1);            
             string cust_id;
             getline(line,cust_id,' ');
             int customer_id= stoi(cust_id);
+            full_command.clear();
             action = new MoveCustomer(original_trainer_id, dest_trainer_id, customer_id);
             action->act(*this);
         }
 
         else if(command == "close"){
             string id;
-            stringstream line(end_sent);
+            stringstream line(full_command);
             getline(line,id,' ');
-            int id_trainer= stoi(id);
-            action = new Close(id_trainer);
+            int trainer_id= stoi(id);
+            full_command.clear();
+            action = new Close(trainer_id);
             action->act(*this);
         }
 
@@ -114,10 +122,11 @@ void Studio::start(){
 
         else if(command == "status"){
             string id;
-            stringstream line(end_sent);
+            stringstream line(full_command);
             getline(line,id,' ');
-            int id_trainer= stoi(id);
-            action = new PrintTrainerStatus(id_trainer);
+            int trainer_id= stoi(id);
+            full_command.clear();
+            action = new PrintTrainerStatus(trainer_id);
             action->act(*this);
         }
 
@@ -136,10 +145,13 @@ void Studio::start(){
             action->act(*this);
         }
 
-    } while(command == "closeAll"); {
-        action = new CloseAll();
-        action->act(*this);
-        open=false;
+        else if(command == "closeAll"){
+            action = new CloseAll();
+            action->act(*this);
+            open=false;
+        }
+        
+        full_command.clear();
     }
 }
 
