@@ -40,27 +40,35 @@ void Studio::start(){
             while(getline(line,customer_name,',')){
                 string type_customer;
                 getline(line,type_customer,' ');
+                Customer* new_customer;
                 if(type_customer=="swt"){
                     SweatyCustomer customer(customer_name,id);
                     id= id+1;
+                    new_customer = &customer;
+                    
                 }
                 else if(type_customer=="chp"){
                     CheapCustomer customer(customer_name,id);
                     id= id+1;
+                    new_customer = &customer;
                 }
                 else if(type_customer=="mcl"){
                     HeavyMuscleCustomer customer(customer_name,id);
                     id= id+1;
+                    new_customer = &customer;
                 }
                 else{//fbd
                     FullBodyCustomer customer(customer_name,id);
                     id= id+1;
+                    new_customer = &customer;
                 }
-                list_of_customer.push_back(*customer);
-                // need to clear the vec
+                list_of_customer.push_back(new_customer);
             }
             action= new OpenTrainer(id, list_of_customer);
             action->act(*this);
+            for(int i=0; i<list_of_customer.size();++i){
+            list_of_customer[i]=nullptr;
+            }
         }
 
         else if(command == "order"){
@@ -98,36 +106,32 @@ void Studio::start(){
             action->act(*this);
         }
 
-        else if(command == "workout_option"){
-            string workout_name;
-            stringstream line(end_sent);
-            getline(line,workout_name,' '); // first paramater
-
+        else if(command == "workout_option"){//???
+            action = new PrintWorkoutOptions();
             action->act(*this);
         }
 
         else if(command == "status"){
-            
+            string id;
+            stringstream line(end_sent);
+            getline(line,id,' ');
+            int trainer_id= stoi(id);
+            action = new PrintTrainerStatus(trainer_id);
             action->act(*this);
         }
 
         else if(command == "log"){
-            
+            action = new PrintActionsLog();
             action->act(*this);
         }
 
         else if(command == "backup"){
-            
+            action = new BackupStudio();
             action->act(*this);
         }
 
         else if(command == "restore"){
-            
-            action->act(*this);
-        }
-
-        else if(command == "close"){
-            
+            action = new RestoreStudio();
             action->act(*this);
         }
 

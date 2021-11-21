@@ -78,7 +78,11 @@ std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_
                 heavy_Id.push_back((*anaerobic_workout[i]).getId());
             }
         }
-    }// at the end of the AF anaerobic_workout is deleted
+        for(int i=0; i<anaerobic_workout.size();++i){
+            anaerobic_workout[i]=nullptr;
+        }//need to delete only the pointers not the memory
+        anaerobic_workout.~vector;// delete the vector
+    }
     return heavy_Id;
 }        
 
@@ -121,6 +125,18 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
             fullbody_Id.push_back((*mix_workout[0]).getId());
             fullbody_Id.push_back((*anaerobic_workout[0]).getId());
         }
+        for(int i=0; i<cardio_workout.size();++i){
+            cardio_workout[i]=nullptr;
+        }
+        cardio_workout.~vector;// delete the vector
+        for(int i=0; i<mix_workout.size();++i){
+            mix_workout[i]=nullptr;
+        }
+        mix_workout.~vector;// delete the vector
+        for(int i=0; i<anaerobic_workout.size();++i){
+            anaerobic_workout[i]=nullptr;
+        
+        anaerobic_workout.~vector;// delete the vector
     }
     return fullbody_Id;
 }
