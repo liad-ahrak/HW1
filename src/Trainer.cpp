@@ -102,7 +102,6 @@ Workout& Trainer:: findWorkout(int idW, const std::vector<Workout>& workoutOptio
             return work;
         }
     }
-    // do we need to return?
 }
 
 /**

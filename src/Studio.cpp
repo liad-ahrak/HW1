@@ -26,6 +26,7 @@ void Studio::start(){
     int id=0;
     string command;//first word
     do{
+        
         string end_sent; 
         cin >> act; //the first word of the input from the user
         getline(cin,end_sent);
@@ -73,8 +74,11 @@ void Studio::start(){
         }
 
         else if(command == "order"){
-            int id= stoi(end_sent);
-            action = new Order(id);
+            string id;
+            stringstream line(end_sent);
+            getline(line,id,' ');
+            int id_trainer= stoi(id); // first paramater
+            action = new Order(id_trainer);
             action->act(*this);
         }
 
@@ -87,14 +91,19 @@ void Studio::start(){
             stringstream line(end_sent);
             getline(line,dest_id,' ');
             int dest_trainer_id=stoi(dest_id); // second paramater
-            int customer_id= stoi(end_sent);
+            string cust_id;
+            getline(line,cust_id,' ');
+            int customer_id= stoi(cust_id);
             action = new MoveCustomer(original_trainer_id, dest_trainer_id, customer_id);
             action->act(*this);
         }
 
         else if(command == "close"){
-            int id= stoi(end_sent);
-            action = new Close(id);
+            string id;
+            stringstream line(end_sent);
+            getline(line,id,' ');
+            int id_trainer= stoi(id);
+            action = new Close(id_trainer);
             action->act(*this);
         }
 
@@ -104,8 +113,11 @@ void Studio::start(){
         }
 
         else if(command == "status"){
-            int trainer_id= stoi(end_sent);
-            action = new PrintTrainerStatus(trainer_id);
+            string id;
+            stringstream line(end_sent);
+            getline(line,id,' ');
+            int id_trainer= stoi(id);
+            action = new PrintTrainerStatus(id_trainer);
             action->act(*this);
         }
 
@@ -124,10 +136,10 @@ void Studio::start(){
             action->act(*this);
         }
 
-    } while(command == "closeAll"){
+    } while(command == "closeAll"); {
         action = new CloseAll();
         action->act(*this);
-        open(false);
+        open=false;
     }
 }
 
