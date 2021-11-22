@@ -16,13 +16,13 @@ Studio::Studio(): //constructor
 
 Studio::Studio(const std::string &configFilePath){//basic data
     ifstream File(configFilePath);//our stream that we will work on
-    char line[256];
-    File.getline(line,256);
+    char line[300];
+    File.getline(line,300);
     int i=1;
     int num_of_trainers;
     int workout_id = 0;
     while(File){
-        File.getline(line,256);
+        File.getline(line,300);
         //ignore lines of this type:
         if(line[0] == '#' || line[0] == '\0'){//ignore all the lines with # or empy lines
             i = i+1;
@@ -59,7 +59,7 @@ Studio::Studio(const std::string &configFilePath){//basic data
 
         }
     }
-} // not done yet
+} // check
 
 
 
