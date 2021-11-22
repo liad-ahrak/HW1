@@ -15,6 +15,11 @@ class Studio{
 public:
 	Studio();
     Studio(const std::string &configFilePath);
+    Studio(Studio& other);
+    ~Studio();
+    Studio & operator=(Studio &other);
+    Studio(Studio& other);
+    Studio& operator=(Studio&& other);
     void start();
     int getNumOfTrainers() const;
     Trainer* getTrainer(int tid);
