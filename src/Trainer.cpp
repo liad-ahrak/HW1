@@ -2,6 +2,8 @@
 #include <exception>
 #include <algorithm>
 #include <istream>
+using namespace std;
+
 
 typedef std::pair<int, Workout> OrderPair;
 
