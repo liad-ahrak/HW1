@@ -5,6 +5,7 @@
 #include "Workout.h"
 #include <istream>
 
+typedef std::pair<int, int> pairs;
 
 Customer::Customer(std::string c_name, int c_id): //constructor
     name(c_name),
@@ -66,20 +67,18 @@ HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
-        std::vector <Workout*> anaerobic_workout;//vector with pointers to our vector
+        std::vector <pairs> anaerobic_workout;//vector with int id, int price 
         for(Workout workout: workout_options){
             if(workout.getType() == ANAEROBIC){
-                Workout* work = &workout;//cheack that this is a new pointer everytime!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                anaerobic_workout.push_back(work);
-                work = nullptr;
+                anaerobic_workout.push_back({workout.getId(),workout.getPrice()});
             }
         }
-        std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){ //sort by Type and then price
-               return (*a).getPrice() > (*b).getPrice();
+        std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](pairs a, pairs b){ //sort by Type and then price
+               return a.second > b.second;
         });
         if(anaerobic_workout.size() > 0){
             for(int i=0; i < anaerobic_workout.size(); ++i){
-                heavy_Id.push_back((*anaerobic_workout[i]).getId());
+                heavy_Id.push_back((anaerobic_workout[i].first));
             }
         }
         anaerobic_workout.clear();
@@ -97,34 +96,33 @@ FullBodyCustomer::FullBodyCustomer(std::string name, int id):
 std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> fullbody_Id;
     if(workout_options.size()>0){
-        std::vector<Workout*> cardio_workout;
-        std::vector<Workout*> mix_workout;
-        std::vector<Workout*> anaerobic_workout;
+        std::vector<pairs> cardio_workout;
+        std::vector<pairs> mix_workout;
+        std::vector<pairs> anaerobic_workout;
         for (Workout workout: workout_options){ //Iterator
-            Workout* work = &workout;//cheack that this is a new pointer everytime!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if(workout.getType() == CARDIO){ 
-                cardio_workout.push_back(work); 
+                cardio_workout.push_back({workout.getId(),workout.getPrice()}); 
             }
             if(workout.getType() == MIXED){ 
-                mix_workout.push_back(work); 
+                mix_workout.push_back({workout.getId(),workout.getPrice()}); 
             }
             else{
-                anaerobic_workout.push_back(work);
+                anaerobic_workout.push_back({workout.getId(),workout.getPrice()}); 
             }
         }
         if(cardio_workout.size() > 0 && mix_workout.size() > 0 &&  anaerobic_workout.size() > 0){
-            std::stable_sort(cardio_workout.begin(), cardio_workout.end(),[](Workout* a, Workout* b){
-                    return (*a).getPrice() < (*b).getPrice();
+            std::stable_sort(cardio_workout.begin(), cardio_workout.end(),[](pairs a, pairs b){
+                    return a.second < b.second;
             });
-            std::stable_sort(mix_workout.begin(), mix_workout.end(),[](Workout* a, Workout* b){
-                    return (*a).getPrice() > (*b).getPrice();
+            std::stable_sort(mix_workout.begin(), mix_workout.end(),[](pairs a, pairs b){
+                    return a.second > b.second;
             });
-            std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](Workout* a, Workout* b){
-                    return (*a).getPrice() < (*b).getPrice();
+            std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](pairs a, pairs b){
+                    return a.second < b.second;
             });
-            fullbody_Id.push_back((*cardio_workout[0]).getId());
-            fullbody_Id.push_back((*mix_workout[0]).getId());
-            fullbody_Id.push_back((*anaerobic_workout[0]).getId());
+            fullbody_Id.push_back((cardio_workout[0]).first);
+            fullbody_Id.push_back((mix_workout[0]).first);
+            fullbody_Id.push_back((anaerobic_workout[0]).first);
         }
         cardio_workout.clear();
         mix_workout.clear();
