@@ -6,6 +6,8 @@
 #include <istream>
 #include "Workout.h"
 
+typedef std::pair<int, int>;
+
 class Customer{
 public:
     Customer(std::string c_name, int c_id);

@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <fstream>
+#include <iostream>
 #include "Workout.h"
 #include "Trainer.h"
 #include "Action.h"
@@ -13,10 +15,29 @@ Studio::Studio(): //constructor
 {}
 
 Studio::Studio(const std::string &configFilePath){//basic data
-    ifstream theFile(configFilePath);
-    vector<string> spltIn
-    //need to find to to convert string to int 
+    ifstream File(configFilePath);//our stream that we will work on
+    char line[256];
+    File.getline(line,256);
+    while(File){
+        File.getline(line,256);
+        //ignore lines of this type:
+        if(line[0] == '#' || line[0] == '\0'){//ignore all the lines with # or empy lines
+            continue;
+        }
+        //imported data need to take
+        else{
+            
+        }
+    }
+
+    stringstream buffer; // why not use FIle? we can turn buffer can into string
+    buffer << File.rdbuf(); //buffer has all the text
+    buffer.str();
+
+
 } // not done yet
+
+
 
 Studio:: Studio(Studio& other):
     open(other.open)
@@ -120,22 +141,18 @@ void Studio::start(){
         getline(cin,full_command);
         stringstream word(full_command);
         getline(word,command,' '); // the first word of the sentance
-        full_command = full_command.substr(full_command.find_first_of(" \t")+1);
 
         if(command == "open"){
             string trainer_id;
             stringstream line(full_command);
             getline(line,trainer_id,' ');
             int id= stoi(trainer_id); // first paramater
-            full_command = full_command.substr(full_command.find_first_of(" \t")+1);
 
             string customer_name;
             vector<Customer*> list_of_customer;
             while(getline(line,customer_name,',')){
-                full_command = full_command.substr(full_command.find_first_of(",")+1);
                 string type_customer;
                 getline(line,type_customer,' ');
-                full_command = full_command.substr(full_command.find_first_of(" \t")+1);
                 Customer* new_customer;
                 if(type_customer=="swt"){
                     SweatyCustomer customer(customer_name,id);
@@ -181,12 +198,10 @@ void Studio::start(){
             stringstream line(full_command);
             getline(line,original_id,' ');
             int original_trainer_id=stoi(original_id);// first paramater
-            full_command = full_command.substr(full_command.find_first_of(" \t")+1);
             string dest_id;
             stringstream line(full_command);
             getline(line,dest_id,' ');
             int dest_trainer_id=stoi(dest_id); // second paramater
-            full_command = full_command.substr(full_command.find_first_of(" \t")+1);            
             string cust_id;
             getline(line,cust_id,' ');
             int customer_id= stoi(cust_id);

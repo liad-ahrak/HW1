@@ -22,6 +22,8 @@ public:
     virtual std::string toString() const=0;
     std:: string completeStr = 0; 
     std:: string publicgetErrorMsg() const;
+    // help for the memory leak of trainer.
+    virtual ~BaseAction() =default;
 protected:
     void complete();
     void error(std::string errorMsg);
