@@ -18,23 +18,47 @@ Studio::Studio(const std::string &configFilePath){//basic data
     ifstream File(configFilePath);//our stream that we will work on
     char line[256];
     File.getline(line,256);
+    int i=1;
+    int num_of_trainers;
+    int workout_id = 0;
     while(File){
         File.getline(line,256);
         //ignore lines of this type:
         if(line[0] == '#' || line[0] == '\0'){//ignore all the lines with # or empy lines
+            i = i+1;
             continue;
         }
-        //imported data need to take
         else{
-            
+            if(i == 2){//num of trainers
+                num_of_trainers=stoi(line);
+                i=i+1;
+            }
+            else if(i==5){//capacity of trainers
+                for(int j=0;j<num_of_trainers;++j){
+                    string trainer_cap;
+                    stringstream cap(line);
+                    getline(cap,trainer_cap,',');
+                    int capacity= stoi(trainer_cap);
+                    Trainer trainer_i(capacity);//creat all the trainers
+                    trainers.push_back(&trainer_i);
+                }
+            }
+            else{// work_option
+                string workout_name;
+                stringstream cap(line);
+                getline(cap,workout_name,',');
+                string workout_type;
+                getline(cap,workout_type,',');
+                string workout_price;
+                getline(cap,workout_type,'\n');
+                int price = stoi(workout_price);
+                Workout workout(workout_id, workout_name,price, workout_type);
+                workout_options.push_back(workout);
+                workout_id = workout_id+1;
+            }
+
         }
     }
-
-    stringstream buffer; // why not use FIle? we can turn buffer can into string
-    buffer << File.rdbuf(); //buffer has all the text
-    buffer.str();
-
-
 } // not done yet
 
 
