@@ -2,8 +2,6 @@
 #include <exception>
 #include <algorithm>
 #include <istream>
-using namespace std;
-
 
 typedef std::pair<int, Workout> OrderPair;
 
@@ -140,25 +138,17 @@ void Trainer::openTrainer(){
  */
 void Trainer::closeTrainer(){
     open = false;
-    for(Customer* customer:customersList){
-        delete(customer);
-    }
     customersList.clear();
-    for(OrderPair pair:orderList){
-        //:((((((((((((((((()))))))))))))))))
-    }
     orderList.clear();
-    salary=0;
 }
-
 /**
  * @brief Get the Salary object
+ * 
  * @return int this is the salary
  */
 int Trainer:: getSalary(){
     return salary;
 }
-
 /**
  * @brief this function return if this trainer is open or close
  * 
@@ -179,42 +169,81 @@ Trainer::~Trainer(){
     //orderList
     orderList.clear();
 } //destructor
-    
+
 Trainer::Trainer(Trainer &trainer){
     std::vector<Customer*> new_trainer_customersList;
     std::vector<OrderPair> new_trainer_orderList;
     //customersList
     for(int i=0; i<customersList.size();++i){
-        new_trainer_customersList[i]= customersList[i];
+        customersList[i]= customersList[i];
     }
     //orderList
     for(int i=0; i<orderList.size();++i){
         OrderPair a((orderList[i]).first,(orderList[i]).second);
-        new_trainer_orderList.push_back(a);
+        orderList.push_back(a);
     }
-    int cap= trainer.getCapacity();
-    Trainer new_trainer(cap, trainer.isOpen(),new_trainer_customersList, new_trainer_orderList);
-    new_trainer.salary=trainer.salary;
+    capacity= trainer.getCapacity();
+    open = trainer.open;
+    salary=trainer.salary;
 } //Copy Constructor
     
 Trainer & Trainer::operator=(Trainer &trainer){
     //check for "self assignment" and do nothing in that case
-    if(this == &trainer){
-        return *this;
+    if(this != &trainer){
+        //clearing the old information
+        for(Customer* cust:customersList){
+            delete(cust);
+        }
+        customersList.clear();
+        orderList.clear();
+        //customersList
+        for(int i=0; i<customersList.size();++i){
+            customersList[i]= customersList[i];
+        }
+        //orderList
+        for(int i=0; i<orderList.size();++i){
+            OrderPair a((orderList[i]).first,(orderList[i]).second);
+            orderList.push_back(a);
+        }
+        capacity = trainer.getCapacity();
+        salary=trainer.salary;
     }
-    // delete the prev info in this
-    this->customersList;
-    this->orderList;
-
     return *this;
 
 } //Copy Assignment Operator
     
 Trainer::Trainer(Trainer&& other){
+    capacity = other.capacity;
+    open = other.open;
+    for(Customer* cust:other.customersList){
+        customersList.push_back(cust);
+        cust=nullptr;
+    }
+    for(OrderPair op:other.orderList){
+        orderList.push_back(op);
+    }
+    other.orderList.clear();
 
 } //Move constructor
     
-Trainer & Trainer::operator=(Trainer &){
-
+Trainer & Trainer::operator=(Trainer && other){
+    if(this != &other){
+        orderList.clear();
+        for(Customer* cust: customersList){
+            (*cust).~Customer();
+        }
+        customersList.clear();
+        capacity = other.capacity;
+    open = other.open;
+    for(Customer* cust:other.customersList){
+        customersList.push_back(cust);
+        cust=nullptr;
+    }
+    for(OrderPair op:other.orderList){
+        orderList.push_back(op);
+    }
+    other.orderList.clear();
+    }
+    return *this;
 } //Move Assignment Operator
 

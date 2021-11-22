@@ -18,7 +18,7 @@ public:
     Studio(Studio& other);
     ~Studio();
     Studio & operator=(Studio &other);
-    Studio(Studio& other);
+    Studio(Studio&& other);
     Studio& operator=(Studio&& other);
     void start();
     int getNumOfTrainers() const;

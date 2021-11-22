@@ -29,7 +29,7 @@ public:
     Trainer(Trainer &trainer); //Copy Constructor
     Trainer & operator=(Trainer &trainer); //Copy Assignment Operator
     Trainer(Trainer&& other); //Move constructor
-    Trainer &operator=(Trainer &); //Move Assignment Operator
+    Trainer &operator=(Trainer&& other); //Move Assignment Operator
 
 private:
     int capacity;
