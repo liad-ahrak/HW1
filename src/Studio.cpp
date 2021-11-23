@@ -105,7 +105,7 @@ Studio:: ~Studio(){
     actionsLog.clear();
 
 }
-Studio::Studio& operator= (Studio& other){
+Studio& Studio::operator= (Studio& other){
     if(this== &other){
         return* this;
     }
@@ -134,11 +134,12 @@ Studio::Studio& operator= (Studio& other){
         }
     }
 }
-Studio:: Studio(Studio&& other){
-    open = other.open;
-    trainers = other.trainers;
-    workout_options = other.workout_options;//problem
-    actionsLog = other.actionsLog;
+Studio:: Studio(Studio&& other):
+    open(other.open),
+    trainers(other.trainers),
+    workout_options(other.workout_options),
+    actionsLog(other.actionsLog)
+{
     other.workout_options.clear();
     other.trainers.clear();
     other.actionsLog.clear();
