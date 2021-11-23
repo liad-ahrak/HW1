@@ -6,7 +6,7 @@
 #include <istream>
 using namespace std;
 
-typedef std::pair<int, int> lfaslfs;
+typedef std::pair<int, int> my_pair;
 
 Customer::Customer(std::string c_name, int c_id): //constructor
     name(c_name),
@@ -68,13 +68,13 @@ HeavyMuscleCustomer::HeavyMuscleCustomer(std::string name, int id):
 std::vector<int> HeavyMuscleCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> heavy_Id;
     if(workout_options.size()>0){
-        std::vector <lfaslfs> anaerobic_workout;//vector with int id, int price 
+        std::vector <my_pair> anaerobic_workout;//vector with int id, int price
         for(Workout workout: workout_options){
             if(workout.getType() == ANAEROBIC){
                 anaerobic_workout.push_back({workout.getId(),workout.getPrice()});
             }
         }
-        std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](lfaslfs a, lfaslfs b){ //sort by Type and then price
+        std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](my_pair a, my_pair b){ //sort by Type and then price
                return a.second > b.second;
         });
         if(anaerobic_workout.size() > 0){
@@ -97,9 +97,9 @@ FullBodyCustomer::FullBodyCustomer(std::string name, int id):
 std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_options){
     std::vector<int> fullbody_Id;
     if(workout_options.size()>0){
-        std::vector<lfaslfs> cardio_workout;
-        std::vector<lfaslfs> mix_workout;
-        std::vector<lfaslfs> anaerobic_workout;
+        std::vector<my_pair> cardio_workout;
+        std::vector<my_pair> mix_workout;
+        std::vector<my_pair> anaerobic_workout;
         for (Workout workout: workout_options){ //Iterator
             if(workout.getType() == CARDIO){ 
                 cardio_workout.push_back({workout.getId(),workout.getPrice()}); 
@@ -112,13 +112,13 @@ std::vector<int> FullBodyCustomer::order(const std::vector<Workout> &workout_opt
             }
         }
         if(cardio_workout.size() > 0 && mix_workout.size() > 0 &&  anaerobic_workout.size() > 0){
-            std::stable_sort(cardio_workout.begin(), cardio_workout.end(),[](lfaslfs a, lfaslfs b){
+            std::stable_sort(cardio_workout.begin(), cardio_workout.end(),[](my_pair a, my_pair b){
                     return a.second < b.second;
             });
-            std::stable_sort(mix_workout.begin(), mix_workout.end(),[](lfaslfs a, lfaslfs b){
+            std::stable_sort(mix_workout.begin(), mix_workout.end(),[](my_pair a, my_pair b){
                     return a.second > b.second;
             });
-            std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](lfaslfs a, lfaslfs b){
+            std::stable_sort(anaerobic_workout.begin(), anaerobic_workout.end(),[](my_pair a, my_pair b){
                     return a.second < b.second;
             });
             fullbody_Id.push_back((cardio_workout[0]).first);

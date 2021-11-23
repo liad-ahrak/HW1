@@ -105,7 +105,7 @@ Studio:: ~Studio(){
     actionsLog.clear();
 
 }
-Studio& Studio:: operator= (Studio& other){
+Studio::Studio& operator= (Studio& other){
     if(this== &other){
         return* this;
     }
@@ -134,10 +134,10 @@ Studio& Studio:: operator= (Studio& other){
         }
     }
 }
-Studio:: Studio(Studio& other){
+Studio:: Studio(Studio&& other){
     open = other.open;
     trainers = other.trainers;
-    workout_options = other.workout_options;
+    workout_options = other.workout_options;//problem
     actionsLog = other.actionsLog;
     other.workout_options.clear();
     other.trainers.clear();
@@ -158,7 +158,7 @@ Studio& Studio:: operator=(Studio&& other){
     actionsLog.clear();
     open = other.open;
     trainers = other.trainers;
-    workout_options = other.workout_options;
+    workout_options = other.workout_options;///problem
     actionsLog = other.actionsLog;
     other.workout_options.clear();
     other.trainers.clear();
@@ -236,7 +236,7 @@ void Studio::start(){
             getline(line,original_id,' ');
             int original_trainer_id=stoi(original_id);// first paramater
             string dest_id;
-            stringstream line(full_command);
+            //stringstream line(full_command);
             getline(line,dest_id,' ');
             int dest_trainer_id=stoi(dest_id); // second paramater
             string cust_id;

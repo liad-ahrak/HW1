@@ -1,11 +1,9 @@
 #ifndef ACTION_H_
 #define ACTION_H_
-
 #include <string>
 #include <iostream>
 #include "../include/Customer.h"
 #include "../include/Studio.h"
-extern Studio* backup;
 
 enum ActionStatus{
     COMPLETED, ERROR
