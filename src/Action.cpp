@@ -258,7 +258,8 @@ std::string PrintTrainerStatus::toString() const
 PrintActionsLog::PrintActionsLog() {}
 
 void PrintActionsLog::act(Studio &studio){//?? why it doesnt work???
-    for (BaseAction* actP : studio.getActionsLog()){
+    vector<BaseAction*> a = studio.getActionsLog();
+    for (BaseAction* actP : a){
         //BaseAction &act1 = *actP;
         std::cout << actP->toString();
         if (actP->getStatus() == COMPLETED){

@@ -306,7 +306,7 @@ Trainer* Studio::getTrainer(int tid) {
 }
 
 const std::vector<BaseAction*>& Studio::getActionsLog() const{// Return a reference to the history of actions
-    return actionsLog;
+    return this->actionsLog;
 } 
 
 std::vector<Workout>& Studio::getWorkoutOptions(){
