@@ -286,6 +286,7 @@ void PrintActionsLog::act(Studio &studio)
 
 std::string PrintActionsLog::toString() const
 {
+    return "log";
 }
 
 BackupStudio::BackupStudio() {}
