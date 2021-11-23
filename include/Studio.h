@@ -26,8 +26,6 @@ public:
 	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
     std::vector<Workout>& getWorkoutOptions();
 
-    // method to add action to the actionsLog vector
-    void addActionToLog(BaseAction* action);
 
 private:
     bool open;

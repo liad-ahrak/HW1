@@ -227,6 +227,7 @@ void Studio::start(){
             full_command.clear();
             action = new Order(trainer_id);
             action->act(*this);
+            
         }
 
         else if(command == "move"){
@@ -291,7 +292,7 @@ void Studio::start(){
             action->act(*this);
             open=false;
         }
-        
+        actionsLog.push_back(action);
         full_command.clear();
     }
 }
@@ -312,8 +313,5 @@ std::vector<Workout>& Studio::getWorkoutOptions(){
     return workout_options;
 }
 
-void Studio:: addActionToLog(BaseAction* action){
-    actionsLog.push_back(action);
-}
 
 
