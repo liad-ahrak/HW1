@@ -4,10 +4,10 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "Workout.h"
-#include "Trainer.h"
-#include "Studio.h"
-#include "Action.h"
+#include "../include/Workout.h"
+#include "../include/Trainer.h"
+#include "../include/Studio.h"
+#include "../include/Action.h"
 #include <iostream>
 
 

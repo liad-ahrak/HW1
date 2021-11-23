@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <istream>
-#include "Customer.h"
-#include "Workout.h"
+#include "../include/Customer.h"
+#include "../include/Workout.h"
 
 typedef std::pair<int, Workout> OrderPair;
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <algorithm>
 #include <istream>
-#include "Workout.h"
+#include "../include/Workout.h"
 
 typedef std::pair<int, int>;
 

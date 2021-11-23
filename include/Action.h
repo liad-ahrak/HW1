@@ -3,8 +3,8 @@
 
 #include <string>
 #include <iostream>
-#include "Customer.h"
-#include "Studio.h"
+#include "../include/Customer.h"
+#include "../include/Studio.h"
 extern Studio* backup;
 
 enum ActionStatus{

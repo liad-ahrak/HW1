@@ -1,12 +1,13 @@
-#include "Studio.h"
+#include "../include/Studio.h"
 #include <vector>
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <iostream>
-#include "Workout.h"
-#include "Trainer.h"
-#include "Action.h"
+#include "../include/Workout.h"
+#include "../include/Trainer.h"
+#include "../include/Action.h"
+
 using namespace std;
 
 Studio::Studio(): //constructor
@@ -49,11 +50,22 @@ Studio::Studio(const std::string &configFilePath){//basic data
                 getline(cap,workout_name,',');
                 string workout_type;
                 getline(cap,workout_type,',');
+                WorkoutType type;
+                if(workout_type == "ANAEROBIC"){
+                    type = ANAEROBIC;
+                }
+                else if(workout_type == "MIXED"){
+                    type = MIXED;
+                }
+                else{
+                    type = CARDIO;
+
+                }
                 string workout_price;
                 getline(cap,workout_type,'\n');
                 int price = stoi(workout_price);
-                Workout workout(workout_id, workout_name,price, workout_type);
-                workout_options.push_back(workout);
+                Workout test = Workout(workout_id, workout_name,price, type);
+                workout_options.push_back(test);
                 workout_id = workout_id+1;
             }
 

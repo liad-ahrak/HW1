@@ -17,10 +17,5 @@ int main(int argc, char** argv){
     	delete backup;
     	backup = nullptr;
     }
-    std:: string input;
-    std:: cin >> input;
-    if(input.compare("start")==0){
-        studio.start();
-    }
     return 0;
 }

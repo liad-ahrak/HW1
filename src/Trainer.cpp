@@ -1,4 +1,4 @@
-#include "Trainer.h"
+#include "../include/Trainer.h"
 #include <exception>
 #include <algorithm>
 #include <istream>
