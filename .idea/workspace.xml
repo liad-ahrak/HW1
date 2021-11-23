@@ -43,7 +43,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Action.cpp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Trainer.cpp" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
@@ -66,7 +66,9 @@
       <workItem from="1636744838446" duration="633000" />
       <workItem from="1636745520823" duration="520000" />
       <workItem from="1637684687718" duration="1395000" />
-      <workItem from="1637686264105" duration="704000" />
+      <workItem from="1637686264105" duration="724000" />
+      <workItem from="1637687049872" duration="586000" />
+      <workItem from="1637687695656" duration="2883000" />
     </task>
     <servers />
   </component>

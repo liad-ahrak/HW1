@@ -2,7 +2,7 @@
 #define ACTION_H_
 #include <string>
 #include <iostream>
-#include "../include/Customer.h"
+#include "Customer.h"
 #include "../include/Studio.h"
 
 enum ActionStatus{

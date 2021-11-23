@@ -4,9 +4,9 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "../include/Workout.h"
-#include "../include/Trainer.h"
-#include "../include/Studio.h"
+#include "Workout.h"
+#include "Trainer.h"
+#include "Studio.h"
 #include "Action.h"
 #include <iostream>
 

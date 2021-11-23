@@ -160,7 +160,7 @@ bool Trainer:: isOpen(){
 }
 
 //Rule of 5
-Trainer::~Trainer(){
+Trainer::~Trainer(){//destructor
     //customersList
     for(int i=0; i<customersList.size();++i){
         (*customersList[i]).~Customer();
@@ -170,14 +170,23 @@ Trainer::~Trainer(){
     orderList.clear();
 } //destructor
 
-Trainer::Trainer(Trainer &trainer){
+Trainer::Trainer(Trainer &trainer){//copy constructor
     std::vector<Customer*> new_trainer_customersList;
     std::vector<OrderPair> new_trainer_orderList;
     //customersList
-    for(int i=0; i<customersList.size();++i){
-        customersList[i]= customersList[i];
+    for(Customer* cus:trainer.getCustomers()) {
+        string name=(*cus).getName();
+        int id=(*cus).getId();
+        Customer new_cus(name,id);
+        new_trainer_customersList.push_back(&new_cus);
     }
-    //orderList
+
+    //orderList std::vector<OrderPair> orderList;
+    for(OrderPair p:trainer.getOrders()){
+        int id = p.first;
+
+
+    }
     for(int i=0; i<orderList.size();++i){
         OrderPair a((orderList[i]).first,(orderList[i]).second);
         orderList.push_back(a);

@@ -134,7 +134,8 @@ Studio& Studio::operator= (Studio& other){
         }
     }
 }
-Studio:: Studio(Studio&& other):
+
+Studio:: Studio(Studio&& other)://Move constructor
     open(other.open),
     trainers(other.trainers),
     workout_options(other.workout_options),
@@ -144,23 +145,42 @@ Studio:: Studio(Studio&& other):
     other.trainers.clear();
     other.actionsLog.clear();
 }
-Studio& Studio:: operator=(Studio&& other){
+
+Studio& Studio:: operator=(Studio&& other){//Move assignment operator
     for(Trainer* tr: trainers){
         (*tr).~Trainer();
     }
     trainers.clear();
+
     for(Workout w:workout_options){
         w.~Workout();
     }
     workout_options.clear();
+
     for(BaseAction* ba:actionsLog){
         (*ba).~BaseAction();
     }
     actionsLog.clear();
-    open = other.open;
-    trainers = other.trainers;
-    workout_options = other.workout_options;///problem
-    actionsLog = other.actionsLog;
+
+    open=other.open;
+    //std::vector<Trainer*> trainers;
+    for(Trainer* t:other.trainers){
+        Trainer tra = new Trainer((*t)); //trainer copy constructor is called
+        trainers.push_back(tra);
+    }
+    //std::vector<Workout> workout_options;
+    for(Workout a:other.workout_options){
+        int id=a.getId();
+        string name=a.getName();
+        int price = a.getPrice();
+        WorkoutType type=a.getType();
+        Workout work(id,name,price,type);
+        workout_options.push_back(work);
+    }
+
+    actionsLog=other.actionsLog;
+
+
     other.workout_options.clear();
     other.trainers.clear();
     other.actionsLog.clear();

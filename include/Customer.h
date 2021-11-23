@@ -4,7 +4,7 @@
 #include <string>
 #include <algorithm>
 #include <istream>
-#include "../include/Workout.h"
+#include "Workout.h"
 
 class Customer{
 public:
